@@ -1,16 +1,10 @@
-# UCL LaTeX Thesis Templates
+# UCL Master Project Thesis
+> Machine Learning for 2D Animation
+> Modified by Weilue Luo
 
-[![Build Status](https://travis-ci.org/UCL/ucl-latex-thesis-templates.svg?branch=master)](https://travis-ci.org/UCL/ucl-latex-thesis-templates)
-
-This is a skeletal thesis template with a class and .sty file that you can use separately if you'd prefer.
-
-To change the thesis type from PhD to MRes or MPhil, look for the setting in `Main.tex`.
-
-The class needs some updating and could use a lot of commenting, and these are being worked on, but the files are perfectly usable right now with pdfLaTeX or lualatex. The repo is tested after each push with lualatex on Travis.
-
-If you have suggestions for improvements, please do submit an issue, drop me a line ([i.kirker+GH@ucl.ac.uk](mailto:i.kirker+GH@ucl.ac.uk)), or throw me a pull request.
-
-*@ikirker*
+## Guide
+- General: https://www.ucl.ac.uk/students/exams-and-assessments/research-assessments/format-bind-and-submit-your-thesis-general-guidance
+- Impact Statement: http://www.grad.ucl.ac.uk/essinfo/docs/Impact-Statement-Guidance-Notes-for-Research-Students-and-Supervisors.pdf
 
 ## Licensing
 
