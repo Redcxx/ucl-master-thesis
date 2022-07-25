@@ -1,6 +1,7 @@
 # UCL Master Project Thesis
-> Machine Learning for 2D Animation
-> Modified by Weilue Luo
+> - Machine Learning for 2D Animation
+> - Modified by Weilue Luo
+> - Overleaf: https://www.overleaf.com/project/62dbf4c8c842e0514499475b
 
 ## Guide
 - General: https://www.ucl.ac.uk/students/exams-and-assessments/research-assessments/format-bind-and-submit-your-thesis-general-guidance
