@@ -5,11 +5,10 @@ Additionally, the `.git-ignore` and `.travis.yaml` files in the original reposit
 
 ```
 ucl-latex-thesis-templates
+├── Content
+├──── Chapters.tex
 ├── Appendices.tex
 ├── BibSettings.tex
-├── Chapter2.tex
-├── Chapter3.tex
-├── Conclusions.tex
 ├── FloatSettings.tex
 ├── Introduction.tex
 ├── LinksAndMetadata.tex
