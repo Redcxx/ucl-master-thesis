@@ -25,12 +25,14 @@ Traditional computer assisted colorization uses an algorithmic approach. Typical
     \label{fig:computer_assisted_colorization}
 \end{figure}
 
-While these methods introduced remarkable improvements, image colorization remains a time-consuming task. In addition, traditional methods often make use of intensity information which does not presents in anime sketches, which made them unsuitable. In recent years, machine learning based methods started to gain popularity as availability of computing resource increases. The milestone work of Pix2pix\cite{isolaImagetoImageTranslationConditional2018} demonstrated a simple yet general architecture for image-to-image translation task. It outperforms vanilla CNN by a large margin (see figure \ref{colorization_cnn}) However, directly apply Pix2pix model will result in artifacts such as \textit{color bleeding}\footnote{Color overflows boundaries defined by sketches.} and \textit{dirtiness}\footnote{Abrupt smoky color patches that are not defined by the sketches.}, these result in style inconsistency and unpleasing colorization (see figure \ref{fig:colorization_pix2pix}). 
+
+
+While these methods introduced remarkable improvements, image colorization remains a time-consuming task. In addition, traditional methods often make use of intensity information which does not presents in anime sketches, which made them unsuitable. In recent years, machine learning based methods started to gain popularity as availability of computing resource increases. The milestone work of Pix2pix\cite{isolaImagetoImageTranslationConditional2018} demonstrated a simple yet general architecture for image-to-image translation task. It outperforms vanilla CNN by a large margin (see figure \ref{fig:colorization_cnn} for vanilla CNN outputs) However, directly apply Pix2pix model will result in artifacts such as \textit{color bleeding}\footnote{Color overflows boundaries defined by sketches.} and \textit{dirtiness}\footnote{Abrupt smoky color patches that are not defined by the sketches.}, these result in style inconsistency and unpleasing colorization (see figure \ref{fig:colorization_pix2pix} for Pix2pix outputs). 
 
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/cnn.jpg}
-    \caption{Vanilla CNN output for anime sketch colorization. Column (a) is the input sketches; column (b) is the target image; and column (c) is the output image.\cite{fransOutlineColorizationTandem2017} We can see that the output suffers from a number of obvious issues, such as fading colors, obvious convolutional artifacts, and messy colors. It is far from visually pleasing.} 
+    \caption{Vanilla CNN output for anime sketch colorization. Column (a) is the input sketches; column (b) is the target image; and column (c) is the output image.\cite{fransOutlineColorizationTandem2017} We can see that the output suffers from a number of obvious issues, such as random fading and dirty colors, and obvious convolutional artifacts. It is far from visually pleasing.} 
     \label{fig:colorization_cnn}
 \end{figure}
 
@@ -38,7 +40,7 @@ While these methods introduced remarkable improvements, image colorization remai
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/pix2pix.jpg}
-    \caption{Vanilla Pix2pix output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image.\cite{steinsDeepLearningProject2022} The coloring are reasonable but suffer from artifacts such as color bleeding and has a certain degree of dirtiness. For example, the colors are different in each stripe of the skirt and random smoky regions are generated.} 
+    \caption{Vanilla Pix2pix output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image.\cite{steinsDeepLearningProject2022} The coloring are reasonable but suffer from artifacts such as color bleeding and has a certain degree of dirtiness. For example, the colors are different in each stripe of the skirt. But we can also observe that the color is more coherent than the vanilla CNN models.} 
     \label{fig:colorization_pix2pix}
 \end{figure}
 
@@ -49,25 +51,29 @@ PetalicaPaint\cite{PetalicaPaint} used a doubly linked deep U-Net architecture t
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/petalica.jpg}
-    \caption{Petalica Paint output for anime sketch colorization, painted with \textit{Canna\protect\footnotemark}  style. Column (a) is the input sketches; column (b) is the target image; and column (c) is the output image.\cite{steinsDeepLearningProject2022} The coloring showed consistency across different region with clean and pleasible coloring, however, there is little artistic texture and global shading presents in the colored image.} 
+    \caption{Petalica Paint output for anime sketch colorization, painted with \textit{Canna\protect\footnotemark}  style. Column (a) is the input sketches; column (b) is the target image; and column (c) is the output image.\cite{steinsDeepLearningProject2022} The coloring showed consistency across different region with clean and pleasible coloring with local shading, however, there is little artistic texture and global shading presents in the colored image.} 
     \label{fig:colorization_petalica}
 \end{figure}
 
 \footnotetext{The name of the style given to a particular model by the author.}
 
-Although the result is much more pleasing, it is still not as vivid as most colored image, two most obvious features missing are artistic texture and global shading. Artistic texture allows the model to have slightly different styles in different region of the image and global shading allows the model to draw sensible shadows and highlights. Fortunately, follow up researches showed that we can obtain artistic texture by using content loss and obtain global shading simply by using a deeper U-Net blocks.\cite{ciUserGuidedDeepAnime2018} (See figure \ref{fig:colorization_alacgan})
+Although the result is much more pleasing, it is still not as vivid as most colored image, two most obvious features missing are artistic texture and global shading. Artistic texture allows the model to have slightly different styles in different region of the image and global shading allows the model to draw sensible shadows and highlights. Fortunately, follow up researches showed that we can obtain artistic texture by using content loss and obtain global shading simply by increasing the receptive field of the U-Net block's decoders\cite{ciUserGuidedDeepAnime2018}. This is the AlacGAN model, which I will explain in details below, sample output can be found at figure \ref{fig:colorization_alacgan}.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/colorization/alacgan.jpg}
-    \caption{AlacGAN output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image. We can observe that the present of global shading and diverse artistic textures result in a much more vivid output.} 
+    \caption{AlacGAN output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image. We can observe that the present of global shading and diverse artistic textures result in a much more vivid output.}
     \label{fig:colorization_alacgan}
 \end{figure}
 
 \section{Design \& Implementation}
-XDoG + U-Net + deep decoder + ResNeXt block + vgg feature layer + color hint + content loss + l2 loss
+\subsection{Dataset}
+The input the model is a binary anime sketches and output is the colorized version of the sketch. It is difficult to find a large amount of such pairs, most researches generates sketches from colored image. Real world anime arts contains a large variety of contents, and thus as a pretrain model, my dataset should cover as much styles as possible to ensure its generality. Nico-opendata\cite{Undefineda} and Danbooru\cite{branwenDanbooru2021LargeScaleCrowdsourced2015} provided large illustration dataset but they are not suitable because it contains many scribbles, result in hard to clean noise. Therefore I adopted the dataset from the original paper.
 
-%The input to the model is binary anime sketches, they are synthesized from real anime images with XDoG boundary detection filter\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012}.
+To stimulate sketch drawings I used the XDoG\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012} algorithm with the setting of sigma = $0.3/0.4/0.5$; k sigma = $4.5$; epsilon = $0$; phi = $10\mathrm{e}9$; and gamma = $0.95$. Different sigmas are randomly chosen during training to stimulate different stroke thickness.
+
+\subsection{Model}
+
 
 \begin{figure}
     \centering
@@ -75,6 +81,43 @@ XDoG + U-Net + deep decoder + ResNeXt block + vgg feature layer + color hint + c
     \caption{Architecture of Generator and Discriminator Network with corresponding number of feature maps (n) and stride (s) indicated for each convolution block.} 
     \label{fig:alacgan_arch}
 \end{figure}
+
+The model follows a GAN architecture, including a generator $\mathcal{G}$ and a discriminator $\mathcal{D}$ inspired by Pix2pix. The generator employs an U-Net\cite{ronnebergerUNetConvolutionalNetworks2015} architecture. Figure \ref{fig:alacgan_arch} shows the overall structure of the model.
+
+
+The generator convert both the sketch and color hint to feature map and repeatedly convoluted and half-scaled them until the features are same size as the local feature network output. The local feature network is a pretrained network that extract feature from the input sketch. Then both outputs are concatenated and repeatedly double-upscale using sequential ResNeXt tunnel until the original dimension. The ResNeXt tunnel is a sequential stack of ResNeXt block\cite{xieAggregatedResidualTransformations2017a} with a pixelshuffle block\cite{shiRealTimeSingleImage2016} appended at the end. It uses ResNeXt block because it is more effective for increasing capacity compared to the vanilla resnet block without additional computational cost. Normalization layer is not used because it reduces flexibility for accurate colorization\cite{nahDeepMultiscaleConvolutional2018}.
+
+The discriminator takes the concatenation of sketch features and colored image as input, forming a cGAN\cite{mirzaConditionalGenerativeAdversarial2014} and employ a SRGAN\cite{ledigPhotoRealisticSingleImage2017} architecture without dilation as we do not need to upscale the image like the original paper does.
+
+The local features are extracted from the sketch image using a pretrained feature extraction network $\mathcal{F}1$. They contains both semantic and spatial information of the sketch. This helps to reduce overfitting on synthetic sketch because human drawn sketches can be very different from synthetic sketches, but the local feature network is pretrained on human drawn illustration which will not affect by synthetic lines. Specifically, the $6^{th}$ convolution layer of the Illustration2Vec\cite{saitoIllustration2VecSemanticVector2015} network is used. It is pretrained on 1,287,596 illustrations, including sketches and colored images, predicting 1,539 labels.
+
+The hint $H$ is randomly sampled pixels from the colored image, the hint has the size 1/4 of the colored image.
+
+The second feature extractor $\mathcal{F}2$ is used to compute the content loss of the fake and real colored image. It is the $4^{th}$ layer of the VGG16 network, pretrained on ImageNet\cite{ImageNet}.
+
+\subsection{Training}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/colorization/alacgan_train.png}
+    \caption{Overview of training process of AlacGAN Network. $\mathcal{F}1$ and $\mathcal{F}2$ denotes two pretrained feature extractors; $\mathcal{G}$ denotes generator and $\mathcal{D}$ denotes discriminator; $X$ denotes input sketch; $H$ denotes optional input color hint; $Y$ denotes target colored image and XDOG denotes the sketch generated from the colored image.} 
+    \label{fig:alacgan_train}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/colorization/alacgan_features.jpg}
+    \caption{Comparison of different techniques used in AlacGAN. (a) denotes input sketch; (b) denotes the target output; (c) denotes output without without adversarial loss; (d) denotes output without local feature network; and (e) denotes output when both exists. We can see that when adversarial loss is missing, color can be diluted. When local features network is missing, global shading can be absent. When both techniques are used, the result looks much more vivid and closer to target image.} 
+    \label{fig:alacgan_features}
+\end{figure}
+
+
+
+
+%XDoG + U-Net + deep decoder + ResNeXt block + vgg feature layer + color hint + content loss + l2 loss
+
+
 
 \section{Results \& Analysis}
 
