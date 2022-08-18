@@ -70,8 +70,6 @@ Although the result is much more pleasing, it is still not as vivid as most colo
 \subsection{Dataset}
 The input the model is a binary anime sketches and output is the colorized version of the sketch. It is difficult to find a large amount of such pairs, most researches generates sketches from colored image. Real world anime arts contains a large variety of contents, and thus as a pretrain model, my dataset should cover as much styles as possible to ensure its generality. Nico-opendata\cite{Undefineda} and Danbooru\cite{branwenDanbooru2021LargeScaleCrowdsourced2015} provided large illustration dataset but they are not suitable because it contains many scribbles, result in hard to clean noise. Therefore I adopted the dataset from the original paper.
 
-To stimulate sketch drawings I used the XDoG\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012} algorithm with the setting of sigma = $0.3/0.4/0.5$; k sigma = $4.5$; epsilon = $0$; phi = $10\mathrm{e}9$; and gamma = $0.95$. Different sigmas are randomly chosen during training to stimulate different stroke thickness.
-
 \subsection{Model}
 
 
@@ -95,9 +93,6 @@ The hint $H$ is randomly sampled pixels from the colored image, the hint has the
 
 The second feature extractor $\mathcal{F}2$ is used to compute the content loss of the fake and real colored image. It is the $4^{th}$ layer of the VGG16 network, pretrained on ImageNet\cite{ImageNet}.
 
-\subsection{Training}
-
-
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/alacgan_train.png}
@@ -108,16 +103,18 @@ The second feature extractor $\mathcal{F}2$ is used to compute the content loss 
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/alacgan_features.jpg}
-    \caption{Comparison of different techniques used in AlacGAN. (a) denotes input sketch; (b) denotes the target output; (c) denotes output without without adversarial loss; (d) denotes output without local feature network; and (e) denotes output when both exists. We can see that when adversarial loss is missing, color can be diluted. When local features network is missing, global shading can be absent. When both techniques are used, the result looks much more vivid and closer to target image.} 
+    \caption{Comparison of different techniques used in AlacGAN. (a) denotes input sketch; (b) denotes the target output; (c) denotes output without adversarial loss; (d) denotes output without local feature network; and (e) denotes output when both exists. We can see that when adversarial loss is missing, color can be diluted. When local features network is missing, global shading can be absent. When both techniques are used, the result looks much more vivid and closer to target image.} 
     \label{fig:alacgan_features}
 \end{figure}
 
+\subsection{Preprocessing}
+For each colored image collected, I used the XDoG\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012} algorithm to generate synthetic sketches that stimulate real sketch drawings. The settings are sigma = $0.3/0.4/0.5$; k sigma = $4.5$; epsilon = $0$; phi = $10\mathrm{e}9$; and gamma = $0.95$. Different sigmas are randomly chosen during training to stimulate different stroke thickness. During preprocessing, all three different sigmas images are generated beforehand to speed up training. All images are also crop and resized to $512\times512$.
+
+\subsection{Training}
+I pretrained with the following settings, similar to the original paper: batch size=8, epoch=500, optimizer=Adam, optimizer betas=(0.5, 0.999), learning rate=0.0001, scheduler=step, scheduler step size=400, scheduler gamma=0.1. The dataset contains 20k images, split for training and testing with ratio 9:1.
+
+As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
 
 
-%XDoG + U-Net + deep decoder + ResNeXt block + vgg feature layer + color hint + content loss + l2 loss
-
-
-
-\section{Results \& Analysis}
 
