@@ -4,9 +4,11 @@
 % The \appendix command resets the chapter counter, and changes the chapter numbering scheme to capital letters.
 %\chapter{Appendices}
 \appendix
-\chapter{An Appendix About Stuff}
-\label{appendixlabel1}
-(stuff)
+\chapter{Machine Learning}
+\label{app:ml}
+\section{Symmetry Problem}
+\label{app:ml:sym}
+In the context of weight initialization, symmetry problem is an argument for weights should not be initialized as same value. This is because if the weights are equal, then its gradient will be equal, and the weights are going to be updated by the same amount. If these weights are attached to the same neuron, it will theoretically remain the same throughout training, and therefore its capability will decrease.
 
 \chapter{Another Appendix About Things}
 \label{appendixlabel2}

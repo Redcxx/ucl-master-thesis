@@ -39,7 +39,20 @@ In the proposed system, the artist will produce a number of rough keyframes with
 \subsection{Image-to-Image Translation}
 As you may have observed, all four tasks falls into the field of Image-to-Image translation (I2I), which is a sub-field in Computer Vision. I2I refers to the task of transforming images from one domain to another, so that they have the styles or characteristics from another domain. It has been gaining popularity in recent year due to its wide range of applications in computer vision problems such as image restoration, super resolution, segmentation and pose estimation. The scope of this project falls into two-domain, supervised I2I\cite{pangImagetoImageTranslationMethods2021}. Most recent research on I2I uses deep convolutional neural network to learn a mapping function between and source and target domain. Pix2pix\cite{isolaImagetoImageTranslationConditional2018} first successfully apply deep convolutional conditional GAN to solve a wide range of I2I problems. However, Pix2pix itself suffers from a number of issues. For example, it often produce blurry result due to use of L2 loss which minimizes the average loss\cite{wangDiscriminativeRegionProposal2018}; training might be unstable and error-prone as resolution increases\cite{wangHighResolutionImageSynthesis2018}; and unable to capture complex scene structure\cite{tangMultiChannelAttentionSelection2019}. Thus we will not directly apply it in our tasks, however, most models are either inspired by or follow the same architecture as Pix2pix.
 
+\subsection{Pretraining \& Finetuning}
+Many researches found that in computer vision tasks, it is generally useful to first pretrain model with large amount of data and then finetune to downstream tasks\cite{baoBEiTBERTPreTraining2021, weiMaskedFeaturePrediction2021, newellHowUsefulSelfSupervised2020}.
+
+Pretraining can be seem as a form of weight initialization, and weight initialization is important when training neural network. In the early days, some researchers initialize their neural network's weight to all zeros, and they soon finds that this results in the \textit{symmetry problem} (see Appendix \ref{app:ml:sym}) which makes the network harder to learn. Some researchers proposed random initialization, which works well in some cases, but if you are unlucky, you can run into initialization that is either too large or too small, it will results in exploding and vanishing gradient problem respectively. An popular alternative is Xavier initialization\cite{glorotUnderstandingDifficultyTraining2010}. Its idea is to initialize weights such that mean of the activations are zeros, and the variance of the activations stay the same across every layer. In other words, weights of a layer $l$ are randomly sampled from a Gaussian/normal distribution with mean $\mu = 0$ and variance $\sigma^2=\frac{1}{n_{l-1}}$, where $n_{l-1}$ is the number of neurons in the previous layer, and bias are initialized with zeros.
+
+While Xavier can improve training process mathematically, the network will likely starts far from the optimum. Pretraining on the other hand, when applied on a similar task, allow you to start closer to the optimum. It can significantly reduce training time and reuse pattern learnt. Additionally, it also reduces the chance of vanishing/exploding gradient.
+
 %Pretraining + finetuning + feature content loss + WGAN-GP, cGAN + U-Net
+
+\subsection{Diffusion Model}
+Recently, diffusion model\cite{hoDenoisingDiffusionProbabilistic2020} has been gaining popularity and shown comparative benchmarks on various computer vision tasks\cite{sahariaPaletteImagetoImageDiffusion2022, dhariwalDiffusionModelsBeat2021}. Although it is relatively new and has not been studies extensively and I did not apply them directly. I will briefly introduce them in case of interest in the future.
+
+
+
 \section{Evaluation Methods}
 %mostly by eye, we can compute the PSNR and SSIM, but, generally eye is enough.
 %Some stuff about things.\cite{example-citation} Some more things. 
