@@ -540,6 +540,41 @@
 
 
 
+@misc{sohl-dicksteinDeepUnsupervisedLearning2015,
+  title = {Deep {{Unsupervised Learning}} Using {{Nonequilibrium Thermodynamics}}},
+  author = {{Sohl-Dickstein}, Jascha and Weiss, Eric A. and Maheswaranathan, Niru and Ganguli, Surya},
+  year = {2015},
+  month = nov,
+  number = {arXiv:1503.03585},
+  eprint = {1503.03585},
+  eprinttype = {arxiv},
+  primaryclass = {cond-mat, q-bio, stat},
+  publisher = {{arXiv}},
+  abstract = {A central problem in machine learning involves modeling complex data-sets using highly flexible families of probability distributions in which learning, sampling, inference, and evaluation are still analytically or computationally tractable. Here, we develop an approach that simultaneously achieves both flexibility and tractability. The essential idea, inspired by non-equilibrium statistical physics, is to systematically and slowly destroy structure in a data distribution through an iterative forward diffusion process. We then learn a reverse diffusion process that restores structure in data, yielding a highly flexible and tractable generative model of the data. This approach allows us to rapidly learn, sample from, and evaluate probabilities in deep generative models with thousands of layers or time steps, as well as to compute conditional and posterior probabilities under the learned model. We additionally release an open source reference implementation of the algorithm.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Condensed Matter - Disordered Systems and Neural Networks,Quantitative Biology - Neurons and Cognition,Statistics - Machine Learning}
+}
+
+
+
+@misc{songScoreBasedGenerativeModeling2021,
+  title = {Score-{{Based Generative Modeling}} through {{Stochastic Differential Equations}}},
+  author = {Song, Yang and {Sohl-Dickstein}, Jascha and Kingma, Diederik P. and Kumar, Abhishek and Ermon, Stefano and Poole, Ben},
+  year = {2021},
+  month = feb,
+  number = {arXiv:2011.13456},
+  eprint = {2011.13456},
+  eprinttype = {arxiv},
+  primaryclass = {cs, stat},
+  publisher = {{arXiv}},
+  doi = {10.48550/arXiv.2011.13456},
+  abstract = {Creating noise from data is easy; creating data from noise is generative modeling. We present a stochastic differential equation (SDE) that smoothly transforms a complex data distribution to a known prior distribution by slowly injecting noise, and a corresponding reverse-time SDE that transforms the prior distribution back into the data distribution by slowly removing the noise. Crucially, the reverse-time SDE depends only on the time-dependent gradient field (\textbackslash aka, score) of the perturbed data distribution. By leveraging advances in score-based generative modeling, we can accurately estimate these scores with neural networks, and use numerical SDE solvers to generate samples. We show that this framework encapsulates previous approaches in score-based generative modeling and diffusion probabilistic modeling, allowing for new sampling procedures and new modeling capabilities. In particular, we introduce a predictor-corrector framework to correct errors in the evolution of the discretized reverse-time SDE. We also derive an equivalent neural ODE that samples from the same distribution as the SDE, but additionally enables exact likelihood computation, and improved sampling efficiency. In addition, we provide a new way to solve inverse problems with score-based models, as demonstrated with experiments on class-conditional generation, image inpainting, and colorization. Combined with multiple architectural improvements, we achieve record-breaking performance for unconditional image generation on CIFAR-10 with an Inception score of 9.89 and FID of 2.20, a competitive likelihood of 2.99 bits/dim, and demonstrate high fidelity generation of 1024 x 1024 images for the first time from a score-based generative model.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning}
+}
+
+
+
 
 
 
