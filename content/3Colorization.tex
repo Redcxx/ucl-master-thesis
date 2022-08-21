@@ -25,9 +25,7 @@ Traditional computer assisted colorization uses an algorithmic approach. Typical
     \label{fig:computer_assisted_colorization}
 \end{figure}
 
-
-
-While these methods introduced remarkable improvements, image colorization remains a time-consuming task. In addition, traditional methods often make use of intensity information which does not presents in anime sketches, which made them unsuitable. In recent years, machine learning based methods started to gain popularity as availability of computing resource increases. The milestone work of Pix2pix\cite{isolaImagetoImageTranslationConditional2018} demonstrated a simple yet general architecture for image-to-image translation task. It outperforms vanilla CNN by a large margin (see figure \ref{fig:colorization_cnn} for vanilla CNN outputs) However, directly apply Pix2pix model will result in artifacts such as \textit{color bleeding}\footnote{Color overflows boundaries defined by sketches.} and \textit{dirtiness}\footnote{Abrupt smoky color patches that are not defined by the sketches.}, these result in style inconsistency and unpleasing colorization (see figure \ref{fig:colorization_pix2pix} for Pix2pix outputs). 
+While these methods introduced remarkable improvements, image colorization remains a time-consuming task. In addition, traditional methods often make use of intensity information which does not presents in anime sketches, which made them unsuitable. In recent years, machine learning based methods started to gain popularity as availability of computing resource increases. The milestone work of Pix2pix\cite{isolaImagetoImageTranslationConditional2018} demonstrated a simple yet general architecture for image-to-image translation task. It outperforms vanilla CNN by a large margin (see figure \ref{fig:colorization_cnn} for vanilla CNN outputs) However, directly apply Pix2pix model will result in artifacts such as \textit{color bleeding}\footnote{Color overflows boundaries defined by sketches.} and \textit{dirtiness}\footnote{Abrupt smoky color patches that are not defined by the sketches.}, they result in inconsistency and unpleasing colorization (see figure \ref{fig:colorization_pix2pix} for Pix2pix outputs). 
 
 \begin{figure}
     \centering
@@ -115,6 +113,16 @@ I pretrained with the following settings, similar to the original paper: batch s
 
 As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
+\todo[inline]{Show NoGhost result?}
 
 
+\section{Future Direction}
+While AlacGAN is able to produce results with global shading and artistic texture, there are still rooms for improvement. First of all, although the model is able to generate colored image according to color hint input, there are little control over other aspects of the output. For example, the direction of light and color tones. In the context of this master project, keeping the same object the same color and styles constant across hundreds of frames or even in another scene can be a challenging task.
+
+As the most challenging task in this master project, the final AlacGAN model generates colored images at 1 frame per second (FPS). It is expected to be the bottleneck of the whole pipeline. To improve the speed of the inference, we can attempt the following ideas:
+
+\begin{itemize}
+    \item \textbf{Knowledge distillation} The pretrained local feature network can be useful at time but it can be computational expensive and utilized at max capacity. We can introduce a smaller feature network and uses the pretrain local feature network as the teacher to guide its learning. This processing is known as knowledge distillation (see appendix \ref{app:ml:kd}). This idea can be expanded to other parts of the network to further compress the model.
+    \item \textbf{}
+\end{itemize}
 
