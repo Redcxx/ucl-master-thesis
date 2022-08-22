@@ -123,6 +123,6 @@ As the most challenging task in this master project, the final AlacGAN model gen
 
 \begin{itemize}
     \item \textbf{Knowledge distillation} The pretrained local feature network can be useful at time but it can be computational expensive and utilized at max capacity. We can introduce a smaller feature network and uses the pretrain local feature network as the teacher to guide its learning. This processing is known as knowledge distillation (see appendix \ref{app:ml:kd}). This idea can be expanded to other parts of the network to further compress the model.
-    \item \textbf{}
+    \item \textbf{Domain specific tuning} The current model is pretrained with thousands of online images, each of them are colored individually with detailed styling and artistic details. However, it is uncommon for 2D animation to achieve such level of details. By observing the frames from NoGhost, it is obvious that the most common coloring technique used is flat shading with little color variation within the same enclosed region. Therefore, we could potentially reduce the receptive field of the ResNeXt convolution tunnels to achieve similar results.
 \end{itemize}
 
