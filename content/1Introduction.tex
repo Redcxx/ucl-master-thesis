@@ -3,9 +3,7 @@
 \section{Background}
 
 \subsection{2D Animation Pipeline}
-
-The process of creating 2D animation consists of some labor intensive tasks, improving the efficiency of them could have a huge effect on the industry as a whole. By saving time and money, we will have greater opportunities to improve the quality and quantity of work done. 
-The existing workflow is segmented into following stages:
+2D animation is a manipulation of objects such that they appear as moving objects. It usually consists of a sequence of frames drawn by hand with computer-assisted technologies. This process of creating 2D animation consists of some labor intensive tasks, improving the efficiency of them could have a huge effect on the industry as a whole. By saving time and money, we will have greater opportunities to improve the quality and quantity of work done.  The following list shows the main stages of existing 2D animation workflow:
 
 \begin{enumerate}
     \item \textbf{Key Poses / Layout} Setting up major actions and placement.
@@ -18,8 +16,10 @@ The existing workflow is segmented into following stages:
     \centering
     \includegraphics[width=0.75\textwidth]{images/introduction/stages.png}
     \caption{Sample frame for 4 stages of the workflow, including Layout, Roughs, Cleanup and Color.} 
+    \todo[inline]{Separate images and discuss what is happening in individual step, with more samples. (Ask NoGhost for more layout samples)}
     \label{fig:stages}
 \end{figure}
+
 
 Currently, lead artist gives front-loaded creative input followed by labor intensive tasks that he has little control. We want lead artist to get an accurate preview of what might be the final product. In particular, when they create the basis for character movement. We plan to create tools that enhance and speed up the process of creating 2D animation. The 2D animator will be offered more creative options in both movement and styles.
 
@@ -37,28 +37,59 @@ In the proposed system, the artist will produce a number of rough keyframes with
 
 \section{General Approach}
 \subsection{Image-to-Image Translation}
-As you may have observed, all four tasks falls into the field of Image-to-Image translation (I2I), which is a sub-field in Computer Vision. I2I refers to the task of transforming images from one domain to another, so that they have the styles or characteristics from another domain. It has been gaining popularity in recent year due to its wide range of applications in computer vision problems such as image restoration, super resolution, segmentation and pose estimation. The scope of this project falls into two-domain, supervised I2I\cite{pangImagetoImageTranslationMethods2021}. Most recent research on I2I uses deep convolutional neural network to learn a mapping function between and source and target domain. Pix2pix\cite{isolaImagetoImageTranslationConditional2018} first successfully apply deep convolutional conditional GAN to solve a wide range of I2I problems. However, Pix2pix itself suffers from a number of issues. For example, it often produce blurry result due to use of L2 loss which minimizes the average loss\cite{wangDiscriminativeRegionProposal2018}; training might be unstable and error-prone as resolution increases\cite{wangHighResolutionImageSynthesis2018}; and unable to capture complex scene structure\cite{tangMultiChannelAttentionSelection2019}. Thus we will not directly apply it in our tasks, however, most models are either inspired by or follow the same architecture as Pix2pix.
+All four tasks falls into the field of Image-to-Image translation (I2I), which is a sub-field in Computer Vision. I2I refers to the task of transforming images from one domain to another, so that they have the styles or characteristics from another domain. It has been gaining popularity in recent year due to its wide range of applications in computer vision problems such as image restoration, super resolution, segmentation and pose estimation. The scope of this project falls into two-domain, supervised I2I\cite{pangImagetoImageTranslationMethods2021}. Most recent research on I2I uses deep convolutional neural network to learn a mapping function between and source and target domain. Pix2pix\cite{isolaImagetoImageTranslationConditional2018} first successfully apply deep convolutional conditional GAN to solve a wide range of I2I problems. However, Pix2pix itself suffers from a number of issues. For example, it often produce blurry result due to use of L2 loss which minimizes the average loss\cite{wangDiscriminativeRegionProposal2018}; training might be unstable and error-prone as resolution increases\cite{wangHighResolutionImageSynthesis2018}; and unable to capture complex scene structure\cite{tangMultiChannelAttentionSelection2019}. Thus we will not directly apply it in our tasks, however, most models are either inspired by or follow the same architecture as Pix2pix.
 
 \subsection{Pretraining}
-Many researches found that in computer vision tasks, it is generally useful to first pretrain model with large amount of data and then finetune to downstream tasks\cite{baoBEiTBERTPreTraining2021, weiMaskedFeaturePrediction2021, newellHowUsefulSelfSupervised2020}.
+Many researches found that in computer vision tasks, it is generally useful to first pretrain model with large amount of data and then finetune to downstream tasks\cite{baoBEiTBERTPreTraining2021, weiMaskedFeaturePrediction2021, newellHowUsefulSelfSupervised2020}. This is especially suitable in the context of this master project because the amount of data provided is a subset of all available data\cite{newellHowUsefulSelfSupervised2020}.
 
-Pretraining can be seem as a form of weight initialization, and weight initialization is important when training neural network. In the early days, some researchers initialize their neural network's weight to all zeros, and they soon finds that this results in the \textit{symmetry problem} (see Appendix \ref{app:ml:sym}) which makes the network harder to learn. Some researchers proposed random initialization, which works well in some cases, but if you are unlucky, you can run into initialization that is either too large or too small, it will results in exploding and vanishing gradient problem respectively. An popular alternative is Xavier initialization\cite{glorotUnderstandingDifficultyTraining2010}. Its idea is to initialize weights such that mean of the activations are zeros, and the variance of the activations stay the same across every layer. In other words, weights of a layer $l$ are randomly sampled from a Gaussian/normal distribution with mean $\mu = 0$ and variance $\sigma^2=\frac{1}{n_{l-1}}$, where $n_{l-1}$ is the number of neurons in the previous layer, and bias are initialized with zeros.
+Pretraining can be seem as a form of weight initialization, and weight initialization is important when training neural network. In the early days, some researchers initialize their neural network's weight to all zeros, and they soon finds that this results in the \textit{symmetry problem} (see appendix \ref{app:ml:sym}) which makes the network harder to learn. Some researchers proposed random initialization, which works well in some cases, but if you are unlucky, you can run into initialization that is either too large or too small, it will results in exploding and vanishing gradient problem respectively (see appendix \ref{app:ml:van_grad}). An popular alternative is Xavier initialization\cite{glorotUnderstandingDifficultyTraining2010} (see appendix \ref{app:ml:van_grad:weight_init}).
 
-While Xavier can improve training process mathematically, the network will likely starts far from the optimum. Pretraining on the other hand, when applied on a similar task, allow you to start closer to the optimum. It can significantly reduce training time and reuse pattern learnt. Additionally, it can also reduces the chance of vanishing/exploding gradient. Beside finetuning for downstream tasks, it can also used as a feature extractor to enhance network's capability, or used as a loss function that determine the feature loss
 
-\todo[inline]{TODO: introduce pretraining researches}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{images/introduction/pretrain_vis.jpg}
+    \caption{Visualization of training progress of simple 2 layer networks. Left is visualized with t-SNE (see appendix \ref{app:stat:tsne}) and right is visualized with ISOMAP (see appendix \ref{app:stat:isomap}) Color from blue to cyan indicates a progression in training iterations. 50 of them are with pretraining (crosses) and another 50 of them are without pretraining (circles). We can observe that training with pretraining are generally faster, more stable than training without pretraining.\cite{erhanWhyDoesUnsupervised}} 
+    \label{fig:pretrain_tsne}
+\end{figure}
+
+While Xavier can improve training process mathematically, the network will likely starts far from the optimum. Pretraining on the other hand, when applied on a similar task, allow model to start closer to the optimum, reducing overall uncertainty (see figure). It can improve convergence time by reusing pattern learnt and improve model robustness\cite{hendrycksUsingPreTrainingCan2019} (see figure \ref{fig:pretrain_robustness}).
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/introduction/pretrain_robustness.png}
+    \caption{Classification error rate for a typical Wide ResNet\cite{zagoruykoWideResidualNetworks2017} on the CIFAR-10 and CIFAR-100 dataset with varying \textit{corruption strength} on the label during training. \textit{Corruption strength} refers to the probability of a training label is incorrect. We can observe that pretraining always outperforms training from scratch.} 
+    \label{fig:pretrain_robustness}
+\end{figure}
+
+However, it is worth-noting that pretraining does not necessarily improve result quality when large training dataset is provided. Recent work showed that benefits of pretraining diminish exponentially with increasing training data available. When sufficient data is provided, pretraining merely speeds up training on vision tasks\cite{heRethinkingImageNetPretraining2018}. Some studies even suggest that pretrained model performs worse because it is difficult for weights to completely abandon previously learned patterns, although it is theoretically possible\cite{el-noubyAreLargescaleDatasets2021}. 
+
+Beside finetuning for downstream tasks, it can also used as a feature extractor to enhance network's capability for a variety of vision tasks. A popular choice is pretrained vision transformer\cite{dosovitskiyImageWorth16x162021}, which is a attention-based network that achieved comparative results with SOTA convolutional neural network while requires less computation. Some studies even directly used pretrained feature extractors for vision classification tasks and achieved modest accuracy\cite{awaisCanPretrainedConvolutional2020}.
+
+
+\subsection{Preprocessing}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/introduction/preprocess_pipeline.png}
+    \caption{Overview of Preprocessing pipeline. In a typical use case, the programmer will first define a set of input and processing functions, feeds them into the pipeline and runs it. The pipeline will automatically converts the inputs into parallizable functions, and split them evenly across processes and threads for efficient processing, and finally produce the processed output.} 
+    \label{fig:preprocess_pipeline}
+\end{figure}
+
+There are need for processing large number of image files into specific format, size and directory for this master project. To achieve this, I developed a small generalized multiprocessing \& multithreading pipeline in Python\cite{WelcomePythonOrg}. Together with pre-built modular processing functions, it provides a set of flexible and maintainable procedure for processing (see figure \ref{fig:preprocess_pipeline}).
+
 
 %Pretraining + finetuning + feature content loss + WGAN-GP, cGAN + U-Net
 
-\subsection{Diffusion Model}
-Recently, diffusion model has been gaining popularity and shown comparative benchmarks on various computer vision tasks\cite{sahariaPaletteImagetoImageDiffusion2022, dhariwalDiffusionModelsBeat2021}. Although it is relatively new and has not been studies extensively and I did not apply them directly. I will briefly introduce them in case of interest in the future because it is highly potential.
+% Tobias says not relevant
+% \subsection{Diffusion Model}
+% Recently, diffusion model has been gaining popularity and shown comparative benchmarks on various computer vision tasks\cite{sahariaPaletteImagetoImageDiffusion2022, dhariwalDiffusionModelsBeat2021}. Although it is relatively new and has not been studies extensively and I did not apply them directly. I will briefly introduce them in case of interest in the future because it is highly potential.
 
-Diffusion model can be traced back to 2015, where researchers proposed a generative machine learning approach that is highly flexible and computationally tractable\cite{sohl-dicksteinDeepUnsupervisedLearning2015}. The idea is to develop a forward diffusion process that systematically and slowly erase the structure in the data, and then learn a backward diffusion process that recovers it. However, it did not attract much attention. Later, a stochastic differential equation that transform complex data distribution to a known prior distribution based on the diffusion process was presented\cite{songScoreBasedGenerativeModeling2021}. It showed that diffusion model can produce comparative performance in certain image generation tasks like inpainting by slowly introducing Gaussian noise into the forward diffusion process, and then learn its reverse process. A denoising diffusion model\cite{hoDenoisingDiffusionProbabilistic2020} also showed that it is capable of generating high quality images.
+% Diffusion model can be traced back to 2015, where researchers proposed a generative machine learning approach that is highly flexible and computationally tractable\cite{sohl-dicksteinDeepUnsupervisedLearning2015}. The idea is to develop a forward diffusion process that systematically and slowly erase the structure in the data, and then learn a backward diffusion process that recovers it. However, it did not attract much attention. Later, a stochastic differential equation that transform complex data distribution to a known prior distribution based on the diffusion process was presented\cite{songScoreBasedGenerativeModeling2021}. It showed that diffusion model can produce comparative performance in certain image generation tasks like inpainting by slowly introducing Gaussian noise into the forward diffusion process, and then learn its reverse process. A denoising diffusion model\cite{hoDenoisingDiffusionProbabilistic2020} also showed that it is capable of generating high quality images.
 
-\todo[inline]{TODO: introduce diffusion model researches}
+% \todo[inline]{TODO: introduce diffusion model researches}
 
-
-\section{Evaluation Methods}
+% \section{Evaluation Methods}
 %mostly by eye, we can compute the PSNR and SSIM, but, generally eye is enough.
 %Some stuff about things.\cite{example-citation} Some more things. 
 

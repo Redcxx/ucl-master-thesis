@@ -17,7 +17,6 @@ Anime-style sketch colorization is a sub-field in image-to-image translation tas
 Traditional computer assisted colorization uses an algorithmic approach. Typically, the user first crops the region that he/she wants to color, then apply a color scheme from a palette, finally the computer will run an algorithm to perform colorization. A popular approach is to minimize the difference between a pixel's color and its weighted average of neighbouring pixels' colors.\cite{levinColorizationUsingOptimizationb} The intuitive is neighboring pixels with similar intensity should have similar colors. This method generates high quality results, but it is time consuming because it requires detailed color input and manual cropping. Follow up researches attempted to reduce the effort via learning-based methods, such as interpolation of user-drawn scribbles using boosting \cite{liScribbleBoostAddingClassification2008} or manifold learning \cite{chenManifoldPreservingEdit2012}; and determine the importance of image feature automatically using neural network \cite{endoDeepPropExtractingDeep2016}.
 
 
-
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/computer_assisted_colorization.jpg}
@@ -34,7 +33,6 @@ While these methods introduced remarkable improvements, image colorization remai
     \label{fig:colorization_cnn}
 \end{figure}
 
-
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/pix2pix.jpg}
@@ -42,9 +40,7 @@ While these methods introduced remarkable improvements, image colorization remai
     \label{fig:colorization_pix2pix}
 \end{figure}
 
-
 PetalicaPaint\cite{PetalicaPaint} used a doubly linked deep U-Net architecture to address style inconsistency problem, by having a deeper network, the model is able to capture the general distribution and keep it consistent. However, it's style varies on loss function hyper-parameters which means each model can only paint with one style (see figure \ref{fig:colorization_petalica}).
-
 
 \begin{figure}
     \centering
@@ -62,24 +58,26 @@ Although the result is much more pleasing, it is still not as vivid as most colo
     \includegraphics[width=0.85\textwidth]{images/colorization/alacgan.jpg}
     \caption{AlacGAN output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image. We can observe that the present of global shading and diverse artistic textures result in a much more vivid output.}
     \label{fig:colorization_alacgan}
+    \todo[inline]{enlarge part of the hint so that they are easier to see.}
 \end{figure}
 
 \section{Design \& Implementation}
+
 \subsection{Dataset}
-The input the model is a binary anime sketches and output is the colorized version of the sketch. It is difficult to find a large amount of such pairs, most researches generates sketches from colored image. Real world anime arts contains a large variety of contents, and thus as a pretrain model, my dataset should cover as much styles as possible to ensure its generality. Nico-opendata\cite{Undefineda} and Danbooru\cite{branwenDanbooru2021LargeScaleCrowdsourced2015} provided large illustration dataset but they are not suitable because it contains many scribbles, result in hard to clean noise. Therefore I adopted the dataset from the original paper.
+The input the model is a binary anime sketches and output is the colorized version of the sketch. It is difficult to find a large amount of such pairs, most researches generates sketches from colored image. Real world anime arts contains a large variety of contents, and thus as a pretrain model, our dataset should cover as much styles as possible to ensure its generality. Popular large illustration dataset such as Nico-opendata\cite{Undefineda} and Danbooru\cite{branwenDanbooru2021LargeScaleCrowdsourced2015} are not suitable because it contains many scribbles, result in hard to clean noise. Therefore I adopted the dataset from the original paper, which is crawled from the internet by the authors.
 
 \subsection{Model}
 
+% Tobias says he does not care about architecture 
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=1.0\textwidth]{images/colorization/alacgan_arch.png}
+%     \caption{Architecture of Generator and Discriminator Network with corresponding number of feature maps (n) and stride (s) indicated for each convolution block.} 
+%     \label{fig:alacgan_arch}
+% \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=1.0\textwidth]{images/colorization/alacgan_arch.png}
-    \caption{Architecture of Generator and Discriminator Network with corresponding number of feature maps (n) and stride (s) indicated for each convolution block.} 
-    \label{fig:alacgan_arch}
-\end{figure}
-
-The model follows a GAN architecture, including a generator $\mathcal{G}$ and a discriminator $\mathcal{D}$ inspired by Pix2pix. The generator employs an U-Net\cite{ronnebergerUNetConvolutionalNetworks2015} architecture. Figure \ref{fig:alacgan_arch} shows the overall structure of the model.
-
+The model follows a GAN architecture, including a generator $\mathcal{G}$ and a discriminator $\mathcal{D}$. The generator employs an U-Net\cite{ronnebergerUNetConvolutionalNetworks2015} architecture.
+%Figure \ref{fig:alacgan_arch} shows the overall structure of the model.
 
 The generator convert both the sketch and color hint to feature map and repeatedly convoluted and half-scaled them until the features are same size as the local feature network output. The local feature network is a pretrained network that extract feature from the input sketch. Then both outputs are concatenated and repeatedly double-upscale using sequential ResNeXt tunnel until the original dimension. The ResNeXt tunnel is a sequential stack of ResNeXt block\cite{xieAggregatedResidualTransformations2017a} with a pixelshuffle block\cite{shiRealTimeSingleImage2016} appended at the end. It uses ResNeXt block because it is more effective for increasing capacity compared to the vanilla resnet block without additional computational cost. Normalization layer is not used because it reduces flexibility for accurate colorization\cite{nahDeepMultiscaleConvolutional2018}.
 
@@ -107,6 +105,7 @@ The second feature extractor $\mathcal{F}2$ is used to compute the content loss 
 
 \subsection{Preprocessing}
 For each colored image collected, I used the XDoG\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012} algorithm to generate synthetic sketches that stimulate real sketch drawings. The settings are sigma = $0.3/0.4/0.5$; k sigma = $4.5$; epsilon = $0$; phi = $10\mathrm{e}9$; and gamma = $0.95$. Different sigmas are randomly chosen during training to stimulate different stroke thickness. During preprocessing, all three different sigmas images are generated beforehand to speed up training. All images are also crop and resized to $512\times512$.
+\todo[inline]{Add more details}
 
 \subsection{Training}
 I pretrained with the following settings, similar to the original paper: batch size=8, epoch=500, optimizer=Adam, optimizer betas=(0.5, 0.999), learning rate=0.0001, scheduler=step, scheduler step size=400, scheduler gamma=0.1. The dataset contains 20k images, split for training and testing with ratio 9:1.
@@ -114,7 +113,6 @@ I pretrained with the following settings, similar to the original paper: batch s
 As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
 \todo[inline]{Show NoGhost result?}
-
 
 \section{Future Direction}
 While AlacGAN is able to produce results with global shading and artistic texture, there are still rooms for improvement. First of all, although the model is able to generate colored image according to color hint input, there are little control over other aspects of the output. For example, the direction of light and color tones. In the context of this master project, keeping the same object the same color and styles constant across hundreds of frames or even in another scene can be a challenging task.
