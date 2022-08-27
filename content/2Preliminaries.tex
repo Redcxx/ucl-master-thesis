@@ -23,6 +23,27 @@ Major challenges exists in training GAN, it can fail easily due to various reaso
 
 
 \subsection{Wasserstein GAN}
+Wasserstein GAN\cite{arjovskyWassersteinGAN2017} is a type of GAN proposed to improve the stability of training vanilla GAN. Compared to vanilla GAN, Wasserstein GAN provides a better gradient, which is helpful for getting rid of problems such as mode collapse, and provides more meaningful training curves for debugging and hyper-parameter tuning.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/preliminary/wgan_vs_gan_grad.png}
+    \caption{Comparing the optimal Wasserstein function (scaled) and optimal GAN discriminator (scaled) given a fixed generator distribution and reference distribution. We can see that the gradient of Wasserstein function is equals to $1$ for the optimal case, and gives less variance compared to optimal GAN discriminator.\cite{FileWassersteinGANCritic}} 
+    \label{fig:wgan_vs_gan_grad}
+\end{figure}
+
+Wasserstein GAN uses Wasserstein distance to compute the loss between actual and target distribution. It has the advantage of producing more consistent values when comparing distributions compared to other functions such as KL-divergence and JS-divergence. This means that its gradients have smaller variance and thus training is more stable (see figure \ref{fig:wgan_vs_gan_grad}). It is also practically useful because it is highly efficient to compute by satisfying the \textit{dual representation theorem} in a metric space:
+
+$$
+W_{1}(\mu, \nu)=\frac{1}{K} \sup _{\|f\|_{L} \leq K} \mathbb{E}_{x \sim \mu}[f(x)]-\mathbb{E}_{y \sim \nu}[f(y)]
+$$
+
+where $W_1$ is the Wasserstein distance; $K$ is any fixed $K > 0$; $\sup$ means supremum (the largest, in other words, the upper bound); and $||\cdot||_L$ is the Lipschitz norm (Lipschitz constant with boundary condition)\footnote{A proof can be found at \url{https://en.wikipedia.org/wiki/Wasserstein\_metric\#Dual\_representation\_of\_W1}}. There are several methods for enforcing this constraint during training. The two most common methods are weight clipping (see appendix \ref{app:ml:weight_clip}) and gradient penalty (see appendix \ref{app:ml:grad_pen}).
+
+
+
+
+
 
 \subsection{WGAN-GP}
 
