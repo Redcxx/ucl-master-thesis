@@ -50,7 +50,19 @@ $$
 $$
 where $\hat{\mu}$ is a fixed distribution, and $a$ is the targeted value. During training, the discriminator will attempt to minimize the difference between $\nabla D(x)$ and $a$, bringing all its gradient close to $a$, and thus restricts the discriminator to have bounded Lipschitz norm.
 
+\section{Skip/Residual Connection}
+\label{app:ml:res_conn}
+Residual connection is a technique used to allow an neural network block to \textit{modify} the  input instead of \textit{transform} the input. Additionally, the output holds a reference to the input which allow gradient to shortcut the previous block directly. There is empirical evidence showing deep neural network built with this technique is easier to optimize. Essentially, applying such technique is to change a function $f$ from $f(x)$ to $f(x)+x$. Figure \ref{fig:res_conn} further illustrate such technique.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/preliminary/res_conn.png}
+    \caption{Residual Connection block. The input of the block is element-wise added to the output of the block, creating shortcut for gradient to flow through.\cite{heDeepResidualLearning2015a}}
+    \label{fig:res_conn}
+\end{figure}
+
+\section{Pre-Activation}
+\label{app:ml:pre_act}
 
 \chapter{Statistics}
 \label{app:stat}
