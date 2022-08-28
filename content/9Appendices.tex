@@ -36,9 +36,20 @@ While large models such as very deep neural network can have large capacity, it 
 
 \section{Weight Clipping}
 \label{app:ml:weight_clip}
+Weight clipping is to enforce gradient in a network to have a specific minimum or/and maximum if they exceed a certain range. It can be used to prevent exploding gradient, but generally this does not fix the real underlying problem. More commonly, it is used in Wasserstein GAN to enforce the \textit{dual representation theorem} constraint so that Wasserstein distance can be computed efficiently. Let $W$ be any $m\times l$ matrix, $c=\max|W|$, and $||\cdot||_s$ be operator norm of the matrix (the element with largest singular value, in other words, the maximum absolute value of its eigenvalues), we have:
+$$
+||W||_s^2\leq c^2ml^2
+$$
+by clipping all entries of $W$ within some interval $[-c, c]$. Thus we can bound $||W||_s$ and restricted the discriminator to have bounded Lipschitz norm.
 
 \section{Gradient Penalty}
 \label{app:ml:grad_pen}
+Gradient penalty is used in Wasserstein GAN to enforce the \textit{dual representation theorem} constraint so that Wasserstein distance can be computed efficiently. It is a loss for the discriminator in GAN in the form of:
+$$
+\mathbb{E}_{x \sim \hat{\mu}}\left[\left(\|\nabla D(x)\|_{2}-a\right)^{2}\right]
+$$
+where $\hat{\mu}$ is a fixed distribution, and $a$ is the targeted value. During training, the discriminator will attempt to minimize the difference between $\nabla D(x)$ and $a$, bringing all its gradient close to $a$, and thus restricts the discriminator to have bounded Lipschitz norm.
+
 
 
 \chapter{Statistics}

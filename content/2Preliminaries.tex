@@ -22,7 +22,7 @@ GAN stands for Generative Adversaial Network\cite{goodfellowGenerativeAdversaria
 Major challenges exists in training GAN, it can fail easily due to various reasons such as mode-collapse (see appendix \ref{app:ml:mode_col}), vanishing gradient (see appendix \ref{app:ml:van_grad}), non-convergence (see appendix \ref{app:ml:non_conv}), instability, inappropriate design (e.g. under/overpowered discriminator, use of loss and optimization algorithm, etc.). Therefore a number of variations are proposed to improve it, and they are commonly adopted in most model describe in this paper.
 
 
-\subsection{Wasserstein GAN}
+\subsection{Wasserstein GANs}
 Wasserstein GAN\cite{arjovskyWassersteinGAN2017} is a type of GAN proposed to improve the stability of training vanilla GAN. Compared to vanilla GAN, Wasserstein GAN provides a better gradient, which is helpful for getting rid of problems such as mode collapse, and provides more meaningful training curves for debugging and hyper-parameter tuning.
 
 \begin{figure}
@@ -38,14 +38,9 @@ $$
 W_{1}(\mu, \nu)=\frac{1}{K} \sup _{\|f\|_{L} \leq K} \mathbb{E}_{x \sim \mu}[f(x)]-\mathbb{E}_{y \sim \nu}[f(y)]
 $$
 
-where $W_1$ is the Wasserstein distance; $K$ is any fixed $K > 0$; $\sup$ means supremum (the largest, in other words, the upper bound); and $||\cdot||_L$ is the Lipschitz norm (Lipschitz constant with boundary condition)\footnote{A proof can be found at \url{https://en.wikipedia.org/wiki/Wasserstein\_metric\#Dual\_representation\_of\_W1}}. There are several methods for enforcing this constraint during training. The two most common methods are weight clipping (see appendix \ref{app:ml:weight_clip}) and gradient penalty (see appendix \ref{app:ml:grad_pen}).
+where $W_1$ is the Wasserstein distance; $K$ is any fixed $K > 0$; $\sup$ means supremum (the largest, in other words, the upper bound); and $||\cdot||_L$ is the Lipschitz norm (Lipschitz constant with boundary condition)\footnote{A proof can be found at \url{https://en.wikipedia.org/wiki/Wasserstein\_metric\#Dual\_representation\_of\_W1}}. There are several methods for enforcing this constraint during training. The two most common methods are weight clipping (used in original paper, see appendix \ref{app:ml:weight_clip}) and gradient penalty (see appendix \ref{app:ml:grad_pen}).
 
-
-
-
-
-
-\subsection{WGAN-GP}
+In practice we would like our gradient to have unit gradient norm almost everywhere. But by using weight clipping, the network will try to attain the maximum gradient and end up learning extremely simple functions\cite{gulrajaniImprovedTrainingWasserstein2017}. Additionally, it is hard to determine an appropriate clip value, because it involves many considerations such as model, dataset, and training procedure etc. By introducing the gradient penalty, instead of hard clipping the values, we are soft penalizing the model which is much more natural. Models that uses gradient penalty to enforce bounded Lipschitz norm is called WGAN-GP.
 
 \subsection{cGAN}
 
