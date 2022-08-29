@@ -64,6 +64,22 @@ Residual connection is a technique used to allow an neural network block to \tex
 \section{Pre-Activation}
 \label{app:ml:pre_act}
 
+\section{Pixel Shuffle}
+\label{app:ml:pix_shuf}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/appendix/pixel_shuffle.png}
+    \caption{Illustration of the pixel shuffle operation. $t^2$ channels of features are combined in a interleaving manner, effectively result in a sub-pixel}
+    \label{fig:pixel_shuffle}
+\end{figure}
+
+Pixels Shuffle is an function often used in super resolution model to implement efficient sub-pixel convolution. It convolute the image using $t^2$ channels and combine feature in different channels, interleaving each other. 
+
+Note that this is a different operation than transpose convolution. Transpose convolution increases size of feature map by convolution with stride, while pixels shuffle increases resolution by flattening multiple feature maps into one. 
+
+
+
 \chapter{Statistics}
 \label{app:stat}
 

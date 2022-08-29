@@ -35,8 +35,8 @@ While these methods introduced remarkable improvements, image colorization remai
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{images/colorization/pix2pix.jpg}
-    \caption{Vanilla Pix2pix output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image.\cite{steinsDeepLearningProject2022} The coloring are reasonable but suffer from artifacts such as color bleeding and has a certain degree of dirtiness. For example, the colors are different in each stripe of the skirt. But we can also observe that the color is more coherent than the vanilla CNN models.} 
+    \includegraphics[width=0.85\textwidth]{images/colorization/pix2pix.jpg}
+    \caption{Vanilla Pix2pix output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image.\cite{steinsDeepLearningProject2022} The coloring are reasonable but suffer from artifacts such as color bleeding and has a certain degree of dirtiness. For example, the colors are different in each stripe of the skirt. But we can also observe that the color is more coherent than the vanilla CNN models as less convolution artifacts are produced.} 
     \label{fig:colorization_pix2pix}
 \end{figure}
 
@@ -56,9 +56,9 @@ Although the result is much more pleasing, it is still not as vivid as most colo
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/colorization/alacgan.jpg}
-    \caption{AlacGAN output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint; column (c) is the target image; and column (d) is the output image. We can observe that the present of global shading and diverse artistic textures result in a much more vivid output.}
+    \caption{AlacGAN output for anime sketch colorization. Column (a) is the input sketches; column (b) is the color hint, the white box enlarges a part of the hint for ease of viewing sample points; column (c) is the target image; and column (d) is the output image. We can observe that the present of global shading and diverse artistic textures result in a much more vivid output.}
     \label{fig:colorization_alacgan}
-    \todo[inline]{enlarge part of the hint so that they are easier to see.}
+    %\todo[inline]{enlarge part of the hint so that they are easier to see.}
 \end{figure}
 
 \section{Design \& Implementation}
@@ -112,7 +112,7 @@ I pretrained with the following settings, similar to the original paper: batch s
 
 As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
-\todo[inline]{Show NoGhost result?}
+\todo[inline]{Show NoGhost result}
 
 \section{Future Direction}
 While AlacGAN is able to produce results with global shading and artistic texture, there are still rooms for improvement. First of all, although the model is able to generate colored image according to color hint input, there are little control over other aspects of the output. For example, the direction of light and color tones. In the context of this master project, keeping the same object the same color and styles constant across hundreds of frames or even in another scene can be a challenging task.

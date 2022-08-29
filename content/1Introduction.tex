@@ -52,7 +52,7 @@ Pretraining can be seem as a form of weight initialization, and weight initializ
     \label{fig:pretrain_tsne}
 \end{figure}
 
-While Xavier can improve training process mathematically, the network will likely starts far from the optimum. Pretraining on the other hand, when applied on a similar task, allow model to start closer to the optimum, reducing overall uncertainty (see figure). It can improve convergence time by reusing pattern learnt and improve model robustness\cite{hendrycksUsingPreTrainingCan2019} (see figure \ref{fig:pretrain_robustness}).
+Although Xavier can improve initialization mathematically, the network will likely starts far from the optimum. Pretraining on the other hand, when applied on a similar task, allow model to start closer to the optimum, improving convergence time by reusing pattern learnt and improve model robustness\cite{hendrycksUsingPreTrainingCan2019} (see figure \ref{fig:pretrain_robustness}).
 
 
 \begin{figure}
@@ -77,6 +77,8 @@ Beside finetuning for downstream tasks, it can also used as a feature extractor 
 \end{figure}
 
 There are need for processing large number of image files into specific format, size and directory for this master project. To achieve this, I developed a small generalized multiprocessing \& multithreading pipeline in Python\cite{WelcomePythonOrg}. Together with pre-built modular processing functions, it provides a set of flexible and maintainable procedure for processing (see figure \ref{fig:preprocess_pipeline}).
+
+
 
 
 %Pretraining + finetuning + feature content loss + WGAN-GP, cGAN + U-Net

@@ -31,6 +31,11 @@ In practice we would like our gradient to have unit gradient norm almost everywh
 \subsection{cGAN}
 Conditional GAN (cGAN) is a type of GAN that have auxiliary information such as class labels or data from other sources as additional input. An ideal cGAN is able to produce a variety of outputs given different contextual information. Additionally it is also converge faster since additional information is provided.
 
+
+\subsection{PatchGAN}
+PatchGAN is a type of GAN that penalize on the generator based on individual patch. Put simply, it is the use of convolution layer as the first layer in discriminator. Such discriminator models the image as Markov Random Field (MRF), assuming each pixel is only dependent on pixels near it.
+
+
 \section{ResNet}
 ResNet stands for Residual Neural Network. It is the first trainable network with hundreds of layers, by applying residual/skip connection technique (see appendix \ref{app:ml:res_conn}). This technique was used extensively in succeeding networks.
 
@@ -55,7 +60,7 @@ $$
 f(x)=\sum^{C}_{i=1} \mathcal{T}_i(x)
 $$
 
-where $\mathcal{T}_i$ can be an arbitrary function, and $C$ is the \textit{cardinality} (the number of parallel paths). Figure \ref{fig:resnet_resnext_cmp} showed a more straight forward explanation. The paper suggests that when attempts to increase capability of a ResNet network, instead of adding more layers, it is more \textit{cost}\footnote{This means the model has higher capability per parameter/computation ratio. i.e. with same number of parameters, ResNeXt outperforms the corresponding ResNet architecture in various vision tasks.} effective to increase the cardinality of the ResNet block.
+where $\mathcal{T}_i$ can be an arbitrary function, and $C$ is the \textit{cardinality} (the number of parallel paths). Figure \ref{fig:resnet_resnext_cmp} showed a more straight forward explanation. The paper suggests that when attempts to increase capability of a ResNet network, instead of adding more layers, it is more \textit{cost} effective to increase the cardinality of the ResNet block. This means the model has higher capability per parameter/computation ratio. i.e. With same number of parameters, ResNeXt outperforms the corresponding ResNet architecture in various vision tasks.
 
 \begin{figure}
     \centering
@@ -64,7 +69,14 @@ where $\mathcal{T}_i$ can be an arbitrary function, and $C$ is the \textit{cardi
     \label{fig:resnet_resnext_cmp}
 \end{figure}
 
-\section{U-Net}
+There are also other well-known variants of ResNet such as WideResNet and DenseNet. However, I will not introduce them because papers I read while researching dominantly chose to use ResNeXt architecture.
+
+
+
+\section{Pix2pix}
+Pix2pix is a cGAN based image-to-image translation architecture. The architecture uses U-Net based generator, and PatchGAN discriminator that penalize model on patches. It is not application-specific and can be applied to a wide range of vision tasks and yield reasonable results. These tasks includes synthesizing photos from label maps, colorizing grayscale images, converting sketches to photos.
+
+\subsection{U-Net}
 U-Net\cite{ronnebergerUNetConvolutionalNetworks2015} is commonly refers as a U-shaped encoder-decoder residual network architecture. It is originally developed for image segmentation in biomedical image processing (see figure \ref{fig:unet_arch}) based on a previous fully convolutional network study\cite{longFullyConvolutionalNetworks2015}. It is a popular approach in many vision tasks.
 
 \begin{figure}
@@ -76,8 +88,4 @@ U-Net\cite{ronnebergerUNetConvolutionalNetworks2015} is commonly refers as a U-s
 
 The first half of the network consists of a number of encoder block. Each consists of a convolutional block followed by a ReLU activation and max pooling. Each block halves the size of feature map. The second half is similar to the first half, except it doubles the size of feature map at each decode block. The output of the corresponding encoder block is given as additional input to the decoder network, this operation is known as skip/residual connection.
 
-Some implementation adds a batch normalization between the convolution layer and the ReLU layer, in attempts to reduces internal covariance shift and improve training stability. Dropout layer may also added after ReLU as a form of regularization to improve generalization of the network.
-
-\section{Pix2pix}
-
-\section{Pixel Shuffle}
+Some implementations add a batch normalization between the convolution layer and the ReLU layer, in attempts to reduces internal covariance shift and improve training stability. Dropout layer may also added after ReLU as a form of regularization to improve generalization of the network.
