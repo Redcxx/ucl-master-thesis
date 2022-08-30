@@ -36,11 +36,11 @@ While large models such as very deep neural network can have large capacity, it 
 
 \section{Weight Clipping}
 \label{app:ml:weight_clip}
-Weight clipping is to enforce gradient in a network to have a specific minimum or/and maximum if they exceed a certain range. It can be used to prevent exploding gradient, but generally this does not fix the real underlying problem. More commonly, it is used in Wasserstein GAN to enforce the \textit{dual representation theorem} constraint so that Wasserstein distance can be computed efficiently. Let $W$ be any $m\times l$ matrix, $c=\max|W|$, and $||\cdot||_s$ be operator norm of the matrix (the element with largest singular value, in other words, the maximum absolute value of its eigenvalues), we have:
+Weight clipping is to enforce gradient in a network to have a specific minimum or/and maximum if they exceed a certain range. It can be used to prevent exploding gradient, but generally, this does not fix the real underlying problem. More commonly, it is used in Wasserstein GAN to enforce the \textit{dual representation theorem} constraint so that Wasserstein distance can be computed efficiently. Let $W$ be any $m\times l$ matrix, $c=\max|W|$, and $||\cdot||_s$ be operator norm of the matrix (the element with largest singular value, in other words, the maximum absolute value of its eigenvalues), we have:
 $$
 ||W||_s^2\leq c^2ml^2
 $$
-by clipping all entries of $W$ within some interval $[-c, c]$. Thus we can bound $||W||_s$ and restricted the discriminator to have bounded Lipschitz norm.
+by clipping all entries of $W$ within some interval $[-c, c]$. Thus we can bound $||W||_s$ and restrict the discriminator to have a bounded Lipschitz norm.
 
 \section{Gradient Penalty}
 \label{app:ml:grad_pen}
@@ -52,12 +52,12 @@ where $\hat{\mu}$ is a fixed distribution, and $a$ is the targeted value. During
 
 \section{Skip/Residual Connection}
 \label{app:ml:res_conn}
-Residual connection is a technique used to allow an neural network block to \textit{modify} the  input instead of \textit{transform} the input. Additionally, the output holds a reference to the input which allow gradient to shortcut the previous block directly. There is empirical evidence showing deep neural network built with this technique is easier to optimize. Essentially, applying such technique is to change a function $f$ from $f(x)$ to $f(x)+x$. Figure \ref{fig:res_conn} further illustrate such technique.
+Residual connection is a technique used to allow an neural network block to \textit{modify} the  input instead of \textit{transform} the input. Additionally, the output holds a reference to the input which allows the gradient to shortcut the previous block directly. There is empirical evidence showing deep neural network built with this technique is easier to optimize. Essentially, applying such technique is to change a function $f$ from $f(x)$ to $f(x)+x$. Figure \ref{fig:res_conn} further illustrate such technique.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.45\textwidth]{images/preliminary/res_conn.png}
-    \caption{Residual Connection block. The input of the block is element-wise added to the output of the block, creating shortcut for gradient to flow through.\cite{heDeepResidualLearning2015a}}
+    \caption{Residual Connection block. The input of the block is element-wise added to the output of the block, creating a shortcut for the gradient to flow through.\cite{heDeepResidualLearning2015a}}
     \label{fig:res_conn}
 \end{figure}
 
@@ -70,13 +70,13 @@ Residual connection is a technique used to allow an neural network block to \tex
 \begin{figure}
     \centering
     \includegraphics[width=0.45\textwidth]{images/appendix/pixel_shuffle.png}
-    \caption{Illustration of the pixel shuffle operation. $t^2$ channels of features are combined in a interleaving manner, effectively result in a sub-pixel}
+    \caption{Illustration of the pixel shuffle operation. $t^2$ channels of features are combined in an interleaving manner, effectively resulting in a sub-pixel}
     \label{fig:pixel_shuffle}
 \end{figure}
 
-Pixels Shuffle is an function often used in super resolution model to implement efficient sub-pixel convolution. It convolute the image using $t^2$ channels and combine feature in different channels, interleaving each other. 
+Pixels Shuffle is a function often used in super-resolution models to implement efficient sub-pixel convolution. It convolutes the image using $t^2$ channels and combines features in different channels, interleaving each other. 
 
-Note that this is a different operation than transpose convolution. Transpose convolution increases size of feature map by convolution with stride, while pixels shuffle increases resolution by flattening multiple feature maps into one. 
+Note that this is a different operation than transpose convolution. Transpose convolution increases the size of the feature map by convolution with stride, while pixels shuffle increases resolution by flattening multiple feature maps into one. 
 
 
 
@@ -85,7 +85,7 @@ Note that this is a different operation than transpose convolution. Transpose co
 
 \section{tSNE}
 \label{app:stat:tsne}
-TSNE stands for t-distributed stochastic neighbor embedding. It is a probabilistic-based method for visualizing high dimensional data by assigning data points in different dimensions onto different regions on a 2 or 3 dimensional grid. Specifically, this assignment method is called Stochastic Neighbor Embedding\cite{hintonStochasticNeighborEmbedding2002}. A pleasant feature of this method is that it preserves neighbor identities, which means similar features will be placed closer together.
+TSNE stands for t-distributed stochastic neighbour embedding. It is a probabilistic-based method for visualizing high dimensional data by assigning data points in different dimensions onto different regions on a 2 or 3-dimensional grid. Specifically, this assignment method is called Stochastic Neighbor Embedding\cite{hintonStochasticNeighborEmbedding2002}. A pleasant feature of this method is that it preserves neighbour identities, which means similar features will be placed closer together.
 
 \section{ISOMAP}
 \label{app:stat:isomap}
@@ -97,10 +97,10 @@ TSNE stands for t-distributed stochastic neighbor embedding. It is a probabilist
 
 % \chapter{Colophon}
 % \label{appendixlabel3}
-% \textit{This is a description of the tools you used to make your thesis. It helps people make future documents, reminds you, and looks good.}
+% \textit{This is a description of the tools you used to make your thesis. It helps people make future documents, reminds them, and looks good.}
 
 % \textit{(example)} This document was set in the Times Roman typeface using \LaTeX\ and Bib\TeX , composed with a text editor. 
- % description of document, e.g. type faces, TeX used, TeXmaker, packages and things used for figures. Like a computational details section.
+ % description of the document, e.g. type faces, TeX used TeXmaker, packages and things used for figures. Like a computational details section.
 % e.g. http://tex.stackexchange.com/questions/63468/what-is-best-way-to-mention-that-a-document-has-been-typeset-with-tex#63503
 
 % Side note:
