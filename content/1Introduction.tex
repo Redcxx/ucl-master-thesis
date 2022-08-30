@@ -3,7 +3,11 @@
 \section{Background}
 
 \subsection{2D Animation Pipeline}
-2D animation is a manipulation of objects such that they appear as moving objects. It usually consists of a sequence of frames drawn by hand with computer-assisted technologies. This process of creating 2D animation consists of some labour-intensive tasks, and improving their efficiency could have a huge effect on the industry as a whole. By saving time and money, we will have greater opportunities to improve the quality and quantity of work done. The following list shows the main stages of the existing 2D animation workflow:
+2D animation is a manipulation of objects such that they appear as moving objects. It usually consists of a sequence of frames drawn by hand with computer-assisted technologies. The process of creating 2D animation consists of some labour-intensive tasks that depend on early-stage decisions. Once the development moves on to the next stage, it is very difficult or comes with a large cost to go back and change something that was not well thought out in the concept stage. This is known as the \textit{waterfall development model}\footnote{This is more of a term used in software development, but I think it is suitable to use here. See \url{https://en.wikipedia.org/wiki/Waterfall\_model} for more information.}. By improving this development process, we can save time and money, and have greater opportunities to improve the quality and quantity of work done, this could have a huge effect on the industry as a whole. In the following paragraphs, I will introduce (1) the current process for creating 2D animation;  (2) the proposed workflow; (3) the role of this master project and thesis. 
+
+
+\subsubsection{Current Process}
+In the current 2D animation creation process, the lead artist gives front-loaded creative input followed by labour-intensive tasks over that he has little control. I have listed the main stages of the existing 2D animation workflow as follows:
 
 \begin{enumerate}
     \item \textbf{Key Poses / Layout} Setting up major actions and placement.
@@ -15,13 +19,12 @@
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/introduction/stages.png}
-    \caption{Sample frame for 4 stages of the workflow, including Layout, Roughs, Cleanup and Color.} 
+    \caption{Sample frame for 4 stages of the workflow, including Layout, Roughs, Cleanup and Colour.} 
     \todo[inline]{Separate images and discuss what is happening in individual step, with more samples. (Ask NoGhost for more layout samples)}
     \label{fig:stages}
 \end{figure}
 
-
-Currently, the lead artist gives front-loaded creative input followed by labour-intensive tasks over that he has little control. We want the lead artist to get an accurate preview of what might be the final product. In particular, when they create the basis for character movement. We plan to create tools that enhance and speed up the process of creating 2D animation. The 2D animator will be offered more creative options in both movement and style.
+We can see that the major actions and character placement are fixed after the first stage, there are only very rough sketches that define the starting and ending points of a transition (known as \textit{keyframes}), which is difficult to work with. \todo{show some samples of this} We want the lead artist to get an accurate preview of what might be the final product and offers potential creative options. This is going to enhance and speed up the process of creating 2D animation.
 
 \subsubsection{Proposed System}
 
@@ -32,12 +35,14 @@ Currently, the lead artist gives front-loaded creative input followed by labour-
     \label{fig:proposed_worflow}
 \end{figure}
 
-In the proposed system, the artist will produce a number of rough keyframes with timing and style information. These frames will go through 4 ML pipelines, each with different purposes: (1) clean up the rough sketches; (2) colouring; (3) frame interpolation (increase fps) and (4) upscaling (super resolution). Each method will be researched and a prototype model will be developed for the proof-of-concept thesis (which is this thesis).
+In the proposed system, the artist will produce a number of rough keyframes with timing and style information. These frames will go through 4 ML pipelines, each consist of a separate task: (1) cleaning up the rough sketches; (2) colouring; (3) frame interpolation (increase fps) and (4) upscaling (super-resolution).
+
+The role of this master project and thesis is to (1) research each task, (2) develop a prototype model, (3) generate a proof-of-concept report and suggest future development direction.
 
 
 \section{General Approach}
 \subsection{Image-to-Image Translation}
-All four tasks fall into the field of Image-to-Image translation (I2I), which is a sub-field in Computer Vision. I2I refers to the task of transforming images from one domain to another so that they have the styles or characteristics from another domain. It has been gaining popularity in recent years due to its wide range of applications in computer vision problems such as image restoration, super resolution, segmentation and pose-estimation. The scope of this project falls into two-domain, supervised I2I\cite{pangImagetoImageTranslationMethods2021}. Most recent research on I2I uses deep convolutional neural networks to learn a mapping function between and source and target domain. Pix2pix\cite{isolaImagetoImageTranslationConditional2018} first successfully apply deep convolutional conditional GAN to solve a wide range of I2I problems. However, Pix2pix itself suffers from a number of issues. For example, it often produce blurry result due to use of L2 loss which minimizes the average loss\cite{wangDiscriminativeRegionProposal2018}; training might be unstable and error-prone as resolution increases\cite{wangHighResolutionImageSynthesis2018}; and unable to capture complex scene structure\cite{tangMultiChannelAttentionSelection2019}. Thus we will not directly apply it in our tasks, however, most models are either inspired by or follow the same architecture as Pix2pix.
+All four tasks fall into the field of Image-to-Image translation (I2I), which is a sub-field in Computer Vision. I2I refers to the task of transforming images from one domain to another so that they have the styles or characteristics from another domain. It has been gaining popularity in recent years due to its wide range of applications in computer vision problems such as image restoration, super-resolution, segmentation and pose-estimation. The scope of this project falls into two-domain, supervised I2I\cite{pangImagetoImageTranslationMethods2021}. Most recent research on I2I uses deep convolutional neural networks to learn a mapping function between and source and target domain. Pix2pix\cite{isolaImagetoImageTranslationConditional2018} first successfully apply deep convolutional conditional GAN to solve a wide range of I2I problems. However, Pix2pix itself suffers from a number of issues. For example, training might be unstable and error-prone as resolution increases\cite{wangHighResolutionImageSynthesis2018}; and unable to capture complex scene structure\cite{tangMultiChannelAttentionSelection2019}. Thus we will not directly apply it in our tasks, however, most models are either inspired by or follow the same architecture as Pix2pix.
 
 \subsection{Pretraining}
 Many researchers found that in computer vision tasks, it is generally useful to first pre-train the model with a large amount of data and then finetune to downstream tasks\cite{baoBEiTBERTPreTraining2021, weiMaskedFeaturePrediction2021, newellHowUsefulSelfSupervised2020}. This is especially suitable in the context of this master project because the amount of data provided is a subset of all available data\cite{newellHowUsefulSelfSupervised2020}.

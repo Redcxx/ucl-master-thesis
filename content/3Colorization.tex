@@ -112,7 +112,8 @@ I pre-trained with the following settings, similar to the original paper: batch 
 
 As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve the model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
-\todo[inline]{Show NoGhost result}
+\section{Analysis}
+% To ensure the pre-trained model indeed learnt a generalized colourization procedure. I conducted 
 
 \section{Future Direction}
 While AlacGAN can produce results with global shading and artistic texture, there is still room for improvement. First of all, although the model can generate coloured images according to colour hint input, there is little control over other aspects of the output. For example, the direction of light and colour tones. In the context of this master project, keeping the same object the same colour and styles constantly across hundreds of frames or even in another scene can be a challenging task.
