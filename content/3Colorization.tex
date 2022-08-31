@@ -113,7 +113,33 @@ I pre-trained with the following settings, similar to the original paper: batch 
 As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve the model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
 \section{Analysis}
-% To ensure the pre-trained model indeed learnt a generalized colourization procedure. I conducted 
+To ensure the pre-trained model indeed learnt a generalized colourization procedure. I conducted experiments on the intensity and colours of the colourization.
+
+\subsection{Mask vs Maskless}
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/colorization/mask_vs_maskless.png}
+    \caption{Hint vs Hint-less colourization samples on the pre-trained model. Column (a) is the input sketch; column (b) is the input hint, which is randomly selected points from the target image, it only shows the top-left corner (25\%) of the input hint, so that it is easier to view some samples; column (c) is the  target image; column (d) is the colourized output with a hint; column (e) is the colourization output without a hint. We can observe that the hint-less output sticks to a coffee-colour-based palette, and the output with hint is able to produce a more diverse colourization output.}
+    \label{fig:mask_vs_maskless}
+\end{figure}
+
+From figure \ref{fig:mask_vs_maskless}, we can see that the shading of the hint-less output suggests that light is coming from multiple directions. On the other hand, the output with a hint is able to identify the correct global shading. This means that by providing a colour hint, we implicitly suggest the light position in the scene.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/colorization/lighter_vs_darker.png}
+    \caption{Lighter vs Darker colourization samples on the pre-trained model. Column (a) is the input sketch; column (b) is the target image; column (c) is the colourized output with a hint multiplier of $0.25$; column (d) is the colourized output with a hint multiplier of $1.0$ (the normal output); column (e) is the colourized output with a hint multiplier of $3.0$. A \textit{hint multiplier} is a number that the input hint will be multiplied with before being passed into the model. We can observe that the colourized images are indeed getting darker as we darken the colour of the hint.}
+    \label{fig:lighter_vs_darker}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/colorization/RYB_comparison.png}
+    \caption{Red-Blue-Yellow Colourization Comparison.}
+    \label{fig:ryb_comparison}
+\end{figure}
+
+
 
 \section{Future Direction}
 While AlacGAN can produce results with global shading and artistic texture, there is still room for improvement. First of all, although the model can generate coloured images according to colour hint input, there is little control over other aspects of the output. For example, the direction of light and colour tones. In the context of this master project, keeping the same object the same colour and styles constantly across hundreds of frames or even in another scene can be a challenging task.
