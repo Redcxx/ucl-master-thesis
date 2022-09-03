@@ -1,4 +1,4 @@
-\chapter{Introductory}
+\chapter{Introduction}
 \label{chapterlabel1}
 \section{Background}
 
@@ -81,10 +81,15 @@ Besides finetuning for downstream tasks, it can also be used as a feature extrac
     \label{fig:preprocess_pipeline}
 \end{figure}
 
-There is a need for processing a large number of image files into a specific format, size and directory for this master project. To achieve this, I developed a small generalized multiprocessing \& multithreading pipeline in Python\cite{WelcomePythonOrg}. Together with pre-built modular processing functions, it provides a set of flexible and maintainable procedures for processing (see figure \ref{fig:preprocess_pipeline}).
+There is a need for processing a large number of image files into a specific format, size and directory for this master project. To achieve this, I developed a small generalized multiprocessing \& multithreading pipeline in Python\cite{WelcomePythonOrg}. Together with pre-built modular processing functions, it provides a set of flexible and maintainable procedures for processing (see figure \ref{fig:preprocess_pipeline} for more details).
 
+In terms of the NoGhost dataset, two major issues need to be fixed before feeding into the machine learning pipelines to perform any data augmentation. 
 
+The first issue is that there are many empty frames in the dataset, and for frames that are not empty, the character itself usually only occupies a small region of the image. If we feed images that are mostly empty into the machine learning models, it may just learn to produce empty output since it can match reasonably well with the target image distribution. The solution is to simply delete any empty frame and crop the empty region of the image. The algorithm is pretty straight forward and it can be used to process efficiently.
 
+The second issue is similar frames. Very often there are few differences between frames, we have to remove them so that the resulting dataset is balanced. Otherwise, the models will bias toward characters that appear very often in the animation, leading to overfitting issues. In order to filter similar images efficiently, an image hashing algorithm is required. The idea is to represent images as a sequence of bytes such that similar images will get the same sequence. When given a new image, we only need to compute its hash and check whether we have seen it before. To accomplish this, we need an appropriate image hashing algorithm that is both efficient and collusion-resistant. There exist several well-known image hashing algorithms (see appendix \ref{app:misc:image_hashing}), and I chose the difference hashing algorithm as it balances speed and false positive well.
+
+In terms of generating training pairs, the current algorithm first matches the directory, sorts the images in the directory by filename and matches these images sequentially. The directory is matched by creating an identifier, this identifier is the result of removing numbers, and type-specific keywords, such as \textit{COL} and \textit{COLOUR} from the full directory name, and then directories with the same identifier are matched.
 
 %Pretraining + finetuning + feature content loss + WGAN-GP, cGAN + U-Net
 

@@ -105,7 +105,8 @@ The second feature extractor $\mathcal{F}2$ is used to compute the content loss 
 
 \subsection{Preprocessing}
 For each coloured image collected, I used the XDoG\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012} algorithm to generate synthetic sketches that stimulate real sketch drawings. The settings are sigma = $0.3/0.4/0.5$; k sigma = $4.5$; epsilon = $0$; phi = $10\mathrm{e}9$; and gamma = $0.95$. Different sigmas are randomly chosen during training to stimulate different stroke thicknesses. During preprocessing, all three different sigmas images are generated beforehand to speed up training. All images are also cropped and resized to $512\times512$.
-\todo[inline]{Add more details}
+
+\todo[inline]{Add details}
 
 \subsection{Training}
 I pre-trained with the following settings, similar to the original paper: batch size=8, epoch=500, optimizer=Adam, optimizer betas=(0.5, 0.999), learning rate=0.0001, scheduler=step, scheduler step size=400, scheduler gamma=0.1. The dataset contains 20k images, split for training and testing with a ratio of 9:1.
@@ -113,9 +114,9 @@ I pre-trained with the following settings, similar to the original paper: batch 
 As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve the model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
 \section{Analysis}
-To ensure the pre-trained model indeed learnt a generalized colourization procedure. I conducted experiments on the intensity and colours of the colourization.
+The main concerns of the pre-trained model is that whether it is capable of generating results according to the input hint. To ensure the pre-trained model indeed learnt a generalized colourization procedure, I have conducted multiple experiments which I will explain below.
 
-\subsection{Mask vs Maskless}
+\subsection{Hint vs Hint-less}
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/mask_vs_maskless.png}
@@ -123,31 +124,41 @@ To ensure the pre-trained model indeed learnt a generalized colourization proced
     \label{fig:mask_vs_maskless}
 \end{figure}
 
-From figure \ref{fig:mask_vs_maskless}, we can see that the shading of the hint-less output suggests that light is coming from multiple directions. On the other hand, the output with a hint is able to identify the correct global shading. This means that by providing a colour hint, we implicitly suggest the light position in the scene.
 
+This experiment was concerned with whether the model is actually making use of the colour hint. figure \ref{fig:mask_vs_maskless} showed the output with and without a colour hint. We can see that the output with a colour hint from the target image demonstrated a more accurate output, therefore we can confirm the colour hint is being used. Additionally, we can also see that the shading of the hint-less output suggests that light is coming from multiple directions. On the other hand, the output with a hint is able to identify the correct direction similar to the target image. This means that by providing a colour hint, we implicitly suggest the light position in the scene.
+
+\subsection{Light Hint vs Dark Hint}
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/lighter_vs_darker.png}
     \caption{Lighter vs Darker colourization samples on the pre-trained model. Column (a) is the input sketch; column (b) is the target image; column (c) is the colourized output with a hint multiplier of $0.25$; column (d) is the colourized output with a hint multiplier of $1.0$ (the normal output); column (e) is the colourized output with a hint multiplier of $3.0$. A \textit{hint multiplier} is a number that the input hint will be multiplied with before being passed into the model. We can observe that the colourized images are indeed getting darker as we darken the colour of the hint.}
     \label{fig:lighter_vs_darker}
 \end{figure}
+In this experiment, we want to know if the model is actually using the intensity information from the colour hint. Figure \ref{fig:lighter_vs_darker} showed a comparison of outputs given different intensity levels of colour hint. We can observe that as the intensity of colour in the hint increases, the intensity of the colour in the output image also increases. This assures us that the model is able to produce a variety of outputs depending on intensity information.
 
+\subsection{Different Colour Hint Colourization}
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/RYB_comparison.png}
-    \caption{Red-Blue-Yellow Colourization Comparison.}
+    \caption{Red-Blue-Yellow Colourization Comparison. Column (a) is the input sketch; column (b) is the target image; column (c) is the colourized output with normal colour hint; column (d) is the colourized output with hint value: red (RGB: 235, 64, 52); column (e) is the colourized output with hint value: blue (RGB: 66, 135, 245); column (f) is the colourized output with hint value: yellow (RGB: 252, 186, 3). All hint values are scaled according to the grayscale value of the target image. We can see that the model is able to be colourized with different colour input hints.}
     \label{fig:ryb_comparison}
 \end{figure}
+In this experiment, the objective is to find out whether the model is able to make use of colour information in the colour hint. Figure \ref{fig:ryb_comparison} showed colourization output with values in the colour hint fixed to a specific value. We can see that the outputs are colourized with the given fixed colour accordingly. For example, when the colour hints are converted to red colour, the corresponding output image is mostly made up of red colour as well. This confirms that the model is able to adapt to various colour hints.
 
-
+\subsection{Finetuning}
+The trained model is loaded and pre-trained on the NoGhost dataset. The model is trained similar to pre-training, except for the following settings: epochs = $100$, learning rate = $0.00002$, scheduler step size = 50, scheduler gamma = 0.2. Results can be found in figure ... Note that due to limited experimental data available, the model will not be able to learn by training from scratch, unless we shrink down the size of the network.
+\todo[inline]{add NoGhost results}
 
 \section{Future Direction}
-While AlacGAN can produce results with global shading and artistic texture, there is still room for improvement. First of all, although the model can generate coloured images according to colour hint input, there is little control over other aspects of the output. For example, the direction of light and colour tones. In the context of this master project, keeping the same object the same colour and styles constantly across hundreds of frames or even in another scene can be a challenging task.
+While AlacGAN can produce results with global shading and artistic texture, there is still room for improvement. First of all, although the model can generate coloured images according to colour hint input, there is little control over other aspects of the output. For example, there is an implicit connection between the colour given in the colour hints with the position of lights in the scene and colour tones. This can be troublesome for the artists to manage, we would like to have a more straightforward and fine-grained way of manipulating the overall colour and styles of the input. In addition, in the context of this master project, keeping the same object the same colour and styles constantly across hundreds of frames or even in another scene can also be a challenging task, ideally, we would like to control individual characters' styles even when there are multiple characters in the same frame. 
 
-As the most challenging task in this master project, the final AlacGAN model generates coloured images at 1 frame per second (FPS). It is expected to be the bottleneck of the whole pipeline. To improve the speed of the inference, we can attempt the following ideas:
+Furthermore, some artefacts were observed when colouring large regions with similar colours, this can be due to the fact that there are very few such regions in the pre-train dataset, as modern anime arts often come with appropriate lighting and details, which can be missing in 2D animation due to workload. I suggest future research to experiment with training from scratch and pre-training to see which model performs best since the pre-train model cannot completely ignore previously learnt patterns.
+
+Moreover, the final AlacGAN model generates coloured images at an average speed of 0.67 frames per second (FPS), which is not up to the standard of real-time requirements, also making it the slowest out of all four tasks. This is expected to be the bottleneck of the whole pipeline. To improve the speed of the inference, I propose the following potential improvements.
 
 \begin{itemize}
     \item \textbf{Knowledge distillation} The pre-trained local feature network can be useful at times but it can be computationally expensive and utilized at max capacity. We can introduce a smaller feature network and uses the pre-trained local feature network as the teacher to guide its learning. This processing is known as knowledge distillation (see appendix \ref{app:ml:kd}). This idea can be expanded to other parts of the network to further compress the model.
     \item \textbf{Domain specific tuning} The current model is pre-trained with thousands of online images, each of them coloured individually with detailed styling and artistic details. However, it is uncommon for 2D animation to achieve such a level of detail. By observing the frames from NoGhost, it is obvious that the most common colouring technique used is flat shading with little colour variation within the same enclosed region. Therefore, we could potentially reduce the receptive field of the ResNeXt convolution tunnels to achieve similar results.
+    \item \textbf{Divide and Conquer} It has been shown that with grayscale information, colourization of real-life photos can be achieved in real-time \cite{zhangRealTimeUserGuidedImage2017}. We can split the single sketch colourization tasks into two: grayscale-lization and colourization. When given information such as light position and exposure, the first model will be able to estimate the depth/shadow features of the sketch image. This information will be then fed into the second network with the sketch image, producing the final colourized image. As such, the first model is essentially a pre-trained feature extractor.
 \end{itemize}
 

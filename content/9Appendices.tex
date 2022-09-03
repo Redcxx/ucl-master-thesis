@@ -91,6 +91,59 @@ TSNE stands for t-distributed stochastic neighbour embedding. It is a probabilis
 \label{app:stat:isomap}
 
 
+\chapter{Miscellanous}
+
+\section{NoGhost Dataset}
+\label{app:misc:noghostdata}
+The NoGhost dataset is provided in GoogleDrive\footnote{Link with restricted access: \url{https://drive.google.com/drive/folders/1C0BppKuJMm29BdusdknqcNxJWGy__Kok?usp=sharing}, please contact NoGhost for accessing the dataset.}. The structure of the dataset is shown in figure \ref{fig:noghost_dataset_structure}. Each innermost folder contains  frames of a character in that particular shot of a specific stage of development.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.35\textwidth]{images/appendix/noghost_dataset_structure.png}
+    \caption{Subset of the folder structure of NoGhost's Dataset. The upper level is the shot folder, follow by version number and image folders, denoting different stages of development. Line: cleaned sketches; COL: colourized images; TD: uncleaned sketches}
+    \label{fig:noghost_dataset_structure}
+\end{figure}
+
+\section{Image Hashing Algorithms}
+\label{app:misc:image_hashing}
+An image hash algorithm converts an image into a sequence of bytes. Ideally, it should: (1) produce an identical/similar hash for similar images; (2) particular strong resistance against noises such as salt and pepper, gaussian smoothing, and colour adjustment. (3) reasonably robust against the change of brightness, contrast, gamma correction, watermark, scaling, and jpeg compression, (3) optionally robust against transformation such as rotation and skew.
+
+\subsection{Average Hashing}
+This hash is robust against scale/aspect ratio, brightness/contrast, and colour (not too much). It is also very efficient to compute.
+\begin{enumerate}
+    \item \textbf{Reduce colour}, converts the image to grayscale.
+    \item \textbf{Reduce size}, scales the image down to $8\times8$ (for 64 bits hash).
+    \item \textbf{Generate hash}, set $1$ if the number in the $8\times8$ hash is more than its average value, else $0$.
+\end{enumerate}
+
+\subsection{Median Hashing}
+Same as Average Hashing, except that it uses median instead of average. Performance is similar to Average Hashing.
+
+\subsection{Perceptive Hashing}
+The algorithm is similar to Average Hashing but uses discrete cosine transform to compare frequency instead of colour values. This hash outperforms the average hashing algorithm in almost aspects, in particular, it generates almost no false positives/negatives. However, it takes twice the time needed for the average hash algorithms.
+\begin{enumerate}
+    \item \textbf{Reduce colour}, converts the image to grayscale.
+    \item \textbf{Reduce size}, scales the image down to $4*8 \times 4*8$ (for 64 bits hash).
+    \item \textbf{Generate frequencies}, apply Discrete Cosine Transform (DCT) to generate frequency information, per row then per column, then crop the top-left ($8\times8$) corner which contains the high frequencies value.
+    \item \textbf{Generate hash}, set $1$ if the number in the $8\times8$ hash is more than its median (not average) value, else $0$.
+\end{enumerate}
+
+\subsection{Block Hashing}
+The image is divided into blocks and generates $1$ or $0$ for each block. These $1$s and $0$s are sequentially concatenated to form a binary hash number.
+
+\subsection{Difference Hashing}
+This algorithm generates very few false positives compared to Average Hashing and runs as fast.
+\begin{enumerate}
+    \item \textbf{Reduce colour}, converts the image to grayscale.
+    \item \textbf{Reduce size}, scales the image down to $9\times8$ (for 64 bits hash).
+    \item \textbf{Generate hash}, set $1$ if the number is more than its right pixels, else $0$
+\end{enumerate}
+
+\subsection{Wavelet Hashing}
+Similar to perceptive hashing, but uses Discrete Wavelet Transformation (DWT) which is another form of frequency representation. The key advantage when compared to DCT is that it captures both frequency and location information\cite{DiscreteWaveletTransform2022}. 
+
+
+
+
 % \chapter{Another Appendix About Things}
 % \label{appendixlabel2}
 % (things)
