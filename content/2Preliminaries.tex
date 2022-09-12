@@ -14,7 +14,7 @@ Wasserstein GAN\cite{arjovskyWassersteinGAN2017} is a type of GAN proposed to im
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/preliminary/wgan_vs_gan_grad.png}
-    \caption{Comparing the optimal Wasserstein function (scaled) and optimal GAN discriminator (scaled) given a fixed generator distribution and reference distribution. We can see that the gradient of the Wasserstein function is equal to $1$ for the optimal case, and gives less variance compared to the optimal GAN discriminator.\cite{FileWassersteinGANCritic}} 
+    \caption[Comparing the optimal Wasserstein function (scaled) and optimal GAN discriminator (scaled) given a fixed generator distribution and reference distribution.]{Comparing the optimal Wasserstein function (scaled) and optimal GAN discriminator (scaled) given a fixed generator distribution and reference distribution. We can see that the gradient of the Wasserstein function is equal to $1$ for the optimal case, and gives less variance compared to the optimal GAN discriminator.\cite{FileWassersteinGANCritic}} 
     \label{fig:wgan_vs_gan_grad}
 \end{figure}
 
@@ -26,7 +26,7 @@ $$
 
 where $W_1$ is the Wasserstein distance; $K$ is any fixed $K > 0$; $\sup$ means supremum (the largest, in other words, the upper bound); and $||\cdot||_L$ is the Lipschitz norm (Lipschitz constant with boundary condition)\footnote{A proof can be found at \url{https://en.wikipedia.org/wiki/Wasserstein\_metric\#Dual\_representation\_of\_W1}}. There are several methods for enforcing this constraint during training. The two most common methods are weight clipping (used in the original paper, see appendix \ref{app:ml:weight_clip}) and gradient penalty (see appendix \ref{app:ml:grad_pen}).
 
-In practice, we would like our gradient to have a unit gradient norm almost everywhere. But by using weight clipping, the network will try to attain the maximum gradient and end up learning extremely simple functions\cite{gulrajaniImprovedTrainingWasserstein2017}. Additionally, it is hard to determine an appropriate clip value, because it involves many considerations such as model, dataset, and training procedure etc. By introducing the gradient penalty, instead of hard clipping the values, we are softly penalizing the model which is much more natural. Models that use gradient penalty to enforce bounded Lipschitz norms are called WGAN-GP.
+In practice, we would like our gradient to have a unit gradient norm almost everywhere. But by using weight clipping, the network will try to attain the maximum gradient and end up learning extremely simple functions\cite{gulrajaniImprovedTrainingWasserstein2017}. Additionally, it is hard to determine an appropriate clip value, because it involves many considerations such as model, dataset, training procedure etc. By introducing the gradient penalty, instead of hard clipping the values, we are softly penalizing the model which is much more natural. Models that use gradient penalty to enforce bounded Lipschitz norms are called WGAN-GP.
 
 \subsection{cGAN}
 Conditional GAN (cGAN) is a type of GAN that have auxiliary information such as class labels or data from other sources as additional input. An ideal cGAN is able to produce a variety of outputs given different contextual information. Additionally, it also converges faster since additional information is provided.
@@ -65,7 +65,7 @@ where $\mathcal{T}_i$ can be an arbitrary function, and $C$ is the \textit{cardi
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/preliminary/resnet_resnext_cmp.png}
-    \caption{Comparison of ResNet and ResNeXt architecture. The left showed a typical block of ResNet and the right showed the corresponding ResNeXt architecture with cardinality \= 32. Both have roughly the same computational complexity. The numbers in the box correspond to \# input channels, filter size, and \# output channels.\cite{xieAggregatedResidualTransformations2017a}} 
+    \caption[Comparison of ResNet and ResNeXt architecture.]{Comparison of ResNet and ResNeXt architecture. The left showed a typical block of ResNet and the right showed the corresponding ResNeXt architecture with cardinality \= 32. Both have roughly the same computational complexity. The numbers in the box correspond to \# input channels, filter size, and \# output channels.\cite{xieAggregatedResidualTransformations2017a}} 
     \label{fig:resnet_resnext_cmp}
 \end{figure}
 
@@ -82,7 +82,7 @@ U-Net\cite{ronnebergerUNetConvolutionalNetworks2015} is commonly refers as a U-s
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/preliminary/unet_arch.png}
-    \caption{U-Net architecture. Light blue box corresponds to multi-channels features; the blue arrow is 3x3 convolution with ReLU; the grey arrow is copy and crop operations, more commonly known as skip/residual connection; the red arrow is 2x2 max pooling; the green arrow is 2x2 up convolution or interpolation, and the light blue arrow is 1x1 convolution for feature reduction.\cite{ronnebergerUNetConvolutionalNetworks2015}} 
+    \caption[U-Net architecture.]{U-Net architecture. Light blue box corresponds to multi-channels features; the blue arrow is 3x3 convolution with ReLU; the grey arrow is copy and crop operations, more commonly known as skip/residual connection; the red arrow is 2x2 max pooling; the green arrow is 2x2 up convolution or interpolation, and the light blue arrow is 1x1 convolution for feature reduction.\cite{ronnebergerUNetConvolutionalNetworks2015}} 
     \label{fig:unet_arch}
 \end{figure}
 

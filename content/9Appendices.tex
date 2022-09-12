@@ -57,7 +57,7 @@ Residual connection is a technique used to allow an neural network block to \tex
 \begin{figure}
     \centering
     \includegraphics[width=0.45\textwidth]{images/preliminary/res_conn.png}
-    \caption{Residual Connection block. The input of the block is element-wise added to the output of the block, creating a shortcut for the gradient to flow through.\cite{heDeepResidualLearning2015a}}
+    \caption[Residual Connection block.]{Residual Connection block. The input of the block is element-wise added to the output of the block, creating a shortcut for the gradient to flow through.\cite{heDeepResidualLearning2015a}}
     \label{fig:res_conn}
 \end{figure}
 
@@ -70,7 +70,7 @@ Residual connection is a technique used to allow an neural network block to \tex
 \begin{figure}
     \centering
     \includegraphics[width=0.45\textwidth]{images/appendix/pixel_shuffle.png}
-    \caption{Illustration of the pixel shuffle operation. $t^2$ channels of features are combined in an interleaving manner, effectively resulting in a sub-pixel}
+    \caption[Illustration of the pixel shuffle operation.]{Illustration of the pixel shuffle operation. $t^2$ channels of features are combined in an interleaving manner, effectively resulting in a sub-pixel}
     \label{fig:pixel_shuffle}
 \end{figure}
 
@@ -89,6 +89,7 @@ TSNE stands for t-distributed stochastic neighbour embedding. It is a probabilis
 
 \section{ISOMAP}
 \label{app:stat:isomap}
+Isomap is a method for dimensional reduction. It provides a simple and efficient method for estimating the intrinsics of the data points according to their neighbours.\footnote{More information can be found at \url{https://en.wikipedia.org/wiki/Isomap}.}
 
 
 \chapter{Miscellanous}
@@ -99,7 +100,7 @@ The NoGhost dataset is provided in GoogleDrive\footnote{Link with restricted acc
 \begin{figure}
     \centering
     \includegraphics[width=0.35\textwidth]{images/appendix/noghost_dataset_structure.png}
-    \caption{Subset of the folder structure of NoGhost's Dataset. The upper level is the shot folder, follow by version number and image folders, denoting different stages of development. Line: cleaned sketches; COL: colourized images; TD: uncleaned sketches}
+    \caption[Subset of the folder structure of NoGhost's Dataset.]{Subset of the folder structure of NoGhost's Dataset. The upper level is the shot folder, follow by version number and image folders, denoting different stages of development. Line: cleaned sketches; COL: colourized images; TD: uncleaned sketches}
     \label{fig:noghost_dataset_structure}
 \end{figure}
 
@@ -141,8 +142,18 @@ This algorithm generates very few false positives compared to Average Hashing an
 \subsection{Wavelet Hashing}
 Similar to perceptive hashing, but uses Discrete Wavelet Transformation (DWT) which is another form of frequency representation. The key advantage when compared to DCT is that it captures both frequency and location information\cite{DiscreteWaveletTransform2022}. 
 
+\section{Supplementary Materials}
+For accessing code and results for all experiments please contacts NoGhost.
 
+\section{Dilation and Erosion}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/appendix/ero_vs_dil.png}
+    \caption[Effects of dilation and erosion operations on an image.]{Effects of dilation and erosion operations on an image. \textbf{(a)} is the original image. \textbf{(b)} is the dilated image, \textbf{(c)} is the eroded image. We can see that dilation expands the strokes and erosion contracts the strokes.\cite{OpenCVErodingDilating}}
+    \label{fig:ero_vs_dil}
+\end{figure}
+Dilation and erosion are morphological image processing operations that change the structure of the input. Figure \ref{fig:ero_vs_dil} shows an intuitive graphical representation of what each operations does.
 
 % \chapter{Another Appendix About Things}
 % \label{appendixlabel2}

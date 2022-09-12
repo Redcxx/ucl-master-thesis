@@ -1,18 +1,18 @@
 \chapter{Colorization}
 \label{chapterlabel3}
 
-Colourization is the process of adding plausible colours to monochrome images, it is a highly uncertain problem that does not have a unique solution. In the context of this master project, we are interested in anime-style sketch colourization, a few distinctive characteristics include:
+Colourization is the process of adding plausible colours to monochrome images; it is a highly uncertain problem that does not have a unique solution. In the context of this master project, we are interested in anime-style sketch colourization; a few distinctive characteristics include:
 
 \begin{itemize}
-    \item Unlike grayscale image input, its input is a binary sketch image.
+    \item Unlike grayscale image input, it is a binary sketch image.
     \item Unlike realistic image colourization, the output is heavily style-oriented, has less well-defined details, and therefore comparably nondeterministic nature.
-    \item Unlike many colourization types of research, the task of filling missing regions is not assessed. The full sketch image is provided without cropping.
-    \item It is relatively difficult to find a dataset that contains a large number of high-quality pairs of sketch and colourized anime images, because artists often do not include them when uploading to the internet.
+    \item Unlike many colourization types of research, the task of filling missing regions is not assessed. The entire sketch image is provided without cropping.
+    \item It is relatively difficult to find a dataset that contains a large number of high-quality pairs of sketch and colourized anime images because artists often do not include them when uploading to the internet.
 \end{itemize}
 
 
 \section{Approaches \& Methods}
-Anime-style sketch colourization is a sub-field in the image-to-image translation tasks. It is a difficult problem because there is an infinite number of ways to produce feasible results, therefore colour strokes are often given as additional input to hint the model to output in a certain style (user-guided colourization). There are many attempts to this problem and I will introduce them in the following paragraphs.
+Anime-style sketch colourization is a sub-field in the image-to-image translation tasks. It is a complex problem because there is an infinite number of ways to produce feasible results, therefore, colour strokes are often given as additional input to hint the model to output in a particular style (user-guided colourization). There are many attempts at this problem and I will introduce them in the following paragraphs.
 
 Traditional computer-assisted colourization uses an algorithmic approach. Typically, the user first crops the region that he/she wants to colour, then apply a colour scheme from a palette, and finally, the computer will run an algorithm to perform colourization. A popular approach is to minimize the difference between a pixel's colour and its weighted average of neighbouring pixels' colours.\cite{levinColorizationUsingOptimizationb} The intuitive is neighbouring pixels with similar intensity should have similar colours. This method generates high-quality results, but it is time-consuming because it requires detailed colour input and manual cropping. Follow-up research attempted to reduce the effort via learning-based methods, such as interpolation of user-drawn scribbles using boosting \cite{liScribbleBoostAddingClassification2008} or manifold learning \cite{chenManifoldPreservingEdit2012}; and determine the importance of image feature automatically using neural network \cite{endoDeepPropExtractingDeep2016}.
 
@@ -20,7 +20,7 @@ Traditional computer-assisted colourization uses an algorithmic approach. Typica
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/computer_assisted_colorization.jpg}
-    \caption{Example interface for traditional computer-assisted algorithmic colourization. The top shows an interface for selecting a colour; the bottom-left and bottom-middle show interfaces for selecting a region; and the bottom-right shows the resulting image.\cite{ColorizeBlackWhite}}
+    \caption[Example interface for traditional computer-assisted algorithmic colourization.]{Example interface for traditional computer-assisted algorithmic colourization. The top shows an interface for selecting a colour; the bottom-left and bottom-middle show interfaces for selecting a region; and the bottom-right shows the resulting image.\cite{ColorizeBlackWhite}}
     \label{fig:computer_assisted_colorization}
 \end{figure}
 
@@ -29,14 +29,14 @@ While these methods introduced remarkable improvements, image colourization rema
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/cnn.jpg}
-    \caption{Vanilla CNN output for anime sketch colourization. Column (a) is the input sketches; column (b) is the target image, and column (c) is the output image.\cite{fransOutlineColorizationTandem2017} We can see that the output suffers from a number of obvious issues, such as random fading and dirty colours, and obvious convolutional artefacts. It is far from visually pleasing.} 
+    \caption[Vanilla CNN output for anime sketch colourization.]{Vanilla CNN output for anime sketch colourization. Column (a) is the input sketches; column (b) is the target image, and column (c) is the output image.\cite{fransOutlineColorizationTandem2017} We can see that the output suffers from a number of obvious issues, such as random fading and dirty colours, and obvious convolutional artefacts. It is far from visually pleasing.} 
     \label{fig:colorization_cnn}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/colorization/pix2pix.jpg}
-    \caption{Vanilla Pix2pix output for anime sketch colourization. Column (a) is the input sketches; column (b) is the colour hint; column (c) is the target image, and column (d) is the output image.\cite{steinsDeepLearningProject2022} The colouring is reasonable but suffers from artefacts such as colour bleeding and has a certain degree of dirtiness. For example, the colours are different on each stripe of the skirt. But we can also observe that the colour is more coherent than the vanilla CNN models as fewer convolution artefacts are produced.} 
+    \caption[Vanilla Pix2pix output for anime sketch colourization.]{Vanilla Pix2pix output for anime sketch colourization. Column (a) is the input sketches; column (b) is the colour hint; column (c) is the target image, and column (d) is the output image.\cite{steinsDeepLearningProject2022} The colouring is reasonable but suffers from artefacts such as colour bleeding and has a certain degree of dirtiness. For example, the colours are different on each stripe of the skirt. But we can also observe that the colour is more coherent than the vanilla CNN models as fewer convolution artefacts are produced.} 
     \label{fig:colorization_pix2pix}
 \end{figure}
 
@@ -45,7 +45,7 @@ PetalicaPaint\cite{PetalicaPaint} used a doubly linked deep U-Net architecture t
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/colorization/petalica.jpg}
-    \caption{Petalica Paint output for anime sketch colorization, painted with \textit{Canna\protect\footnotemark}  style. Column (a) is the input sketches; column (b) is the target image, and column (c) is the output image.\cite{steinsDeepLearningProject2022} The colouring showed consistency across the different regions with clean and plausible colouring with local shading, however, there is little artistic texture and global shading present in the coloured image.} 
+    \caption[Petalica Paint output for anime sketch colorization, painted with \textit{Canna\protect\footnotemark}  style.]{Petalica Paint output for anime sketch colorization, painted with \textit{Canna\protect\footnotemark}  style. Column (a) is the input sketches; column (b) is the target image, and column (c) is the output image.\cite{steinsDeepLearningProject2022} The colouring showed consistency across the different regions with clean and plausible colouring with local shading, however, there is little artistic texture and global shading present in the coloured image.} 
     \label{fig:colorization_petalica}
 \end{figure}
 
@@ -56,7 +56,7 @@ Although the result is much more pleasing, it is still not as vivid as most colo
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/colorization/alacgan.jpg}
-    \caption{AlacGAN output for anime sketch colourization. Column (a) is the input sketches; column (b) is the colour hint, the white box enlarges a part of the hint for ease of viewing sample points; column (c) is the target image, and column (d) is the output image. We can observe that the presence of global shading and diverse artistic textures result in a much more vivid output.}
+    \caption[AlacGAN output for anime sketch colourization.]{AlacGAN output for anime sketch colourization. Column (a) is the input sketches; column (b) is the colour hint, the white box enlarges a part of the hint for ease of viewing sample points; column (c) is the target image, and column (d) is the output image. We can observe that the presence of global shading and diverse artistic textures result in a much more vivid output.}
     \label{fig:colorization_alacgan}
     %\todo[inline]{enlarge part of the hint so that they are easier to see.}
 \end{figure}
@@ -92,21 +92,19 @@ The second feature extractor $\mathcal{F}2$ is used to compute the content loss 
 \begin{figure}
     \ centring
     \includegraphics[width=0.75\textwidth]{images/colorization/alacgan_train.png}
-    \caption{Overview of the training process of AlacGAN Network. $\mathcal{F}1$ and $\mathcal{F}2$ denotes two pre-trained feature extractors; $\mathcal{G}$ denotes generator and $\mathcal{D}$ denotes discriminator; $X$ denotes input sketch; $H$ denotes optional input colour hint; $Y$ denotes target coloured image and XDOG denotes the sketch generated from the coloured image.} 
+    \caption[Overview of the training process of AlacGAN Network.]{Overview of the training process of AlacGAN Network. $\mathcal{F}1$ and $\mathcal{F}2$ denotes two pre-trained feature extractors; $\mathcal{G}$ denotes generator and $\mathcal{D}$ denotes discriminator; $X$ denotes input sketch; $H$ denotes optional input colour hint; $Y$ denotes target coloured image and XDOG denotes the sketch generated from the coloured image.} 
     \label{fig:alacgan_train}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/alacgan_features.jpg}
-    \caption{Comparison of different techniques used in AlacGAN. (a) denotes input sketch; (b) denotes the target output; (c) denotes output without adversarial loss; (d) denotes output without local feature network, and (e) denotes output when both exist. We can see that when an adversarial loss is missing, colour can be diluted. When the local features network is missing, global shading can be absent. When both techniques are used, the result looks much more vivid and closer to the target image.} 
+    \caption[Comparison of different techniques used in AlacGAN.]{Comparison of different techniques used in AlacGAN. (a) denotes input sketch; (b) denotes the target output; (c) denotes output without adversarial loss; (d) denotes output without local feature network, and (e) denotes output when both exist. We can see that when an adversarial loss is missing, colour can be diluted. When the local features network is missing, global shading can be absent. When both techniques are used, the result looks much more vivid and closer to the target image.} 
     \label{fig:alacgan_features}
 \end{figure}
 
 \subsection{Preprocessing}
-For each coloured image collected, I used the XDoG\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012} algorithm to generate synthetic sketches that stimulate real sketch drawings. The settings are sigma = $0.3/0.4/0.5$; k sigma = $4.5$; epsilon = $0$; phi = $10\mathrm{e}9$; and gamma = $0.95$. Different sigmas are randomly chosen during training to stimulate different stroke thicknesses. During preprocessing, all three different sigmas images are generated beforehand to speed up training. All images are also cropped and resized to $512\times512$.
-
-\todo[inline]{Add details}
+For each coloured image collected, I used the XDoG\cite{winnemollerXDoGEXtendedDifferenceofGaussians2012} algorithm to generate synthetic sketches that stimulate real sketch drawings. The settings are sigma = $0.3/0.4/0.5$; k sigma = $4.5$; epsilon = $0$; phi = $10\mathrm{e}9$; and gamma = $0.95$. Different sigmas are randomly chosen during training to stimulate different stroke thicknesses. All images are also cropped and resized to $512\times512$ before feeding into the model.
 
 \subsection{Training}
 I pre-trained with the following settings, similar to the original paper: batch size=8, epoch=500, optimizer=Adam, optimizer betas=(0.5, 0.999), learning rate=0.0001, scheduler=step, scheduler step size=400, scheduler gamma=0.1. The dataset contains 20k images, split for training and testing with a ratio of 9:1.
@@ -114,13 +112,13 @@ I pre-trained with the following settings, similar to the original paper: batch 
 As for data augmentation, random resized crop, random jittering and random horizontal flip are applied to improve the model's generalization capability. After augmentation, images are also normalized with mean and variance of $0.5$ for more stabilized input.
 
 \section{Analysis}
-The main concerns of the pre-trained model is that whether it is capable of generating results according to the input hint. To ensure the pre-trained model indeed learnt a generalized colourization procedure, I have conducted multiple experiments which I will explain below.
+The main concern of the pre-trained model is whether it is capable of generating results according to the input hint. To ensure the pre-trained model indeed learnt a generalized colourization procedure, I have conducted multiple experiments which I will explain below.
 
 \subsection{Hint vs Hint-less}
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/mask_vs_maskless.png}
-    \caption{Hint vs Hint-less colourization samples on the pre-trained model. Column (a) is the input sketch; column (b) is the input hint, which is randomly selected points from the target image, it only shows the top-left corner (25\%) of the input hint, so that it is easier to view some samples; column (c) is the  target image; column (d) is the colourized output with a hint; column (e) is the colourization output without a hint. We can observe that the hint-less output sticks to a coffee-colour-based palette, and the output with hint is able to produce a more diverse colourization output.}
+    \caption[Hint vs Hint-less colourization samples on the pre-trained model.]{Hint vs Hint-less colourization samples on the pre-trained model. Column (a) is the input sketch; column (b) is the input hint, which is randomly selected points from the target image, it only shows the top-left corner (25\%) of the input hint, so that it is easier to view some samples; column (c) is the  target image; column (d) is the colourized output with a hint; column (e) is the colourization output without a hint. We can observe that the hint-less output sticks to a coffee-colour-based palette, and the output with hint is able to produce a more diverse colourization output.}
     \label{fig:mask_vs_maskless}
 \end{figure}
 
@@ -131,7 +129,7 @@ This experiment was concerned with whether the model is actually making use of t
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/lighter_vs_darker.png}
-    \caption{Lighter vs Darker colourization samples on the pre-trained model. Column (a) is the input sketch; column (b) is the target image; column (c) is the colourized output with a hint multiplier of $0.25$; column (d) is the colourized output with a hint multiplier of $1.0$ (the normal output); column (e) is the colourized output with a hint multiplier of $3.0$. A \textit{hint multiplier} is a number that the input hint will be multiplied with before being passed into the model. We can observe that the colourized images are indeed getting darker as we darken the colour of the hint.}
+    \caption[Lighter vs Darker colourization samples on the pre-trained model.]{Lighter vs Darker colourization samples on the pre-trained model. Column (a) is the input sketch; column (b) is the target image; column (c) is the colourized output with a hint multiplier of $0.25$; column (d) is the colourized output with a hint multiplier of $1.0$ (the normal output); column (e) is the colourized output with a hint multiplier of $3.0$. A \textit{hint multiplier} is a number that the input hint will be multiplied with before being passed into the model. We can observe that the colourized images are indeed getting darker as we darken the colour of the hint.}
     \label{fig:lighter_vs_darker}
 \end{figure}
 In this experiment, we want to know if the model is actually using the intensity information from the colour hint. Figure \ref{fig:lighter_vs_darker} showed a comparison of outputs given different intensity levels of colour hint. We can observe that as the intensity of colour in the hint increases, the intensity of the colour in the output image also increases. This assures us that the model is able to produce a variety of outputs depending on intensity information.
@@ -140,25 +138,51 @@ In this experiment, we want to know if the model is actually using the intensity
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{images/colorization/RYB_comparison.png}
-    \caption{Red-Blue-Yellow Colourization Comparison. Column (a) is the input sketch; column (b) is the target image; column (c) is the colourized output with normal colour hint; column (d) is the colourized output with hint value: red (RGB: 235, 64, 52); column (e) is the colourized output with hint value: blue (RGB: 66, 135, 245); column (f) is the colourized output with hint value: yellow (RGB: 252, 186, 3). All hint values are scaled according to the grayscale value of the target image. We can see that the model is able to be colourized with different colour input hints.}
+    \caption[Red-Blue-Yellow Colourization Comparison.]{Red-Blue-Yellow Colourization Comparison. Column (a) is the input sketch; column (b) is the target image; column (c) is the colourized output with normal colour hint; column (d) is the colourized output with hint value: red (RGB: 235, 64, 52); column (e) is the colourized output with hint value: blue (RGB: 66, 135, 245); column (f) is the colourized output with hint value: yellow (RGB: 252, 186, 3). All hint values are scaled according to the grayscale value of the target image. We can see that the model is able to be colourized with different colour input hints.}
     \label{fig:ryb_comparison}
 \end{figure}
 In this experiment, the objective is to find out whether the model is able to make use of colour information in the colour hint. Figure \ref{fig:ryb_comparison} showed colourization output with values in the colour hint fixed to a specific value. We can see that the outputs are colourized with the given fixed colour accordingly. For example, when the colour hints are converted to red colour, the corresponding output image is mostly made up of red colour as well. This confirms that the model is able to adapt to various colour hints.
 
 \subsection{Finetuning}
-The trained model is loaded and pre-trained on the NoGhost dataset. The model is trained similar to pre-training, except for the following settings: epochs = $100$, learning rate = $0.00002$, scheduler step size = 50, scheduler gamma = 0.2. Results can be found in figure ... Note that due to limited experimental data available, the model will not be able to learn by training from scratch, unless we shrink down the size of the network.
-\todo[inline]{add NoGhost results}
+The trained model is loaded and pre-trained on the NoGhost dataset. The model is trained similar to pre-training, except for the following settings: epochs = $100$, learning rate = $0.00002$, scheduler step size = 50, scheduler gamma = 0.2. Results can be found in the figure ... Note that due to limited experimental data available from NoGhost, the model will not be able to learn by training from scratch.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/colorization/noghost-colorization.png}
+    \caption[Output samples of the fine-tuned models on the NoGhost dataset.]{Output samples of the fine-tuned models on the NoGhost dataset. Column (a) is the input sketch; column (b) is the input colour hint; column (c) is the target image, and column (d) is the colourized image. Only the centre 25\% of the hint image is shown so that the hint can be seen. We can see that, generally, the model is able to produce a satisfactory result. }
+    \label{fig:noghost_colorization}
+\end{figure}
+
+Figure \ref{fig:noghost_colorization} showed some samples output from the model. We can see that it performs reasonably well on these images. Note that the model still retained some of its characteristics learnt from the pre-trained model. Figure \ref{fig:shading-compare} showed that the model is still applying a small degree of shading to the sketch despite there being almost no shading in the NoGhost dataset.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/colorization/shading-compare.png}
+    \caption[Comparison of shading between target NoGhost image and colourized NoGhost image.]{Comparison of shading between target NoGhost image and colourized NoGhost image. Column (a) is the input sketch, column (b) is the target image, and column (c) is the colourized image. Regions to note are in light-blue boxes. The colourized arm in the top row has lighter colour on top as if some lights are coming from the top right-hand corner. Similarly, the metal strips at the front of the car are coloured in a way that produces a metallic feel.}
+    \label{fig:shading-compare}
+\end{figure}
+
 
 \section{Future Direction}
-While AlacGAN can produce results with global shading and artistic texture, there is still room for improvement. First of all, although the model can generate coloured images according to colour hint input, there is little control over other aspects of the output. For example, there is an implicit connection between the colour given in the colour hints with the position of lights in the scene and colour tones. This can be troublesome for the artists to manage, we would like to have a more straightforward and fine-grained way of manipulating the overall colour and styles of the input. In addition, in the context of this master project, keeping the same object the same colour and styles constantly across hundreds of frames or even in another scene can also be a challenging task, ideally, we would like to control individual characters' styles even when there are multiple characters in the same frame. 
+While AlacGAN can produce results with global shading and artistic texture, there is still room for improvement. First, although the model can generate coloured images according to colour hint input, there is little control over other aspects of the output. For example, there is an implicit connection between the colour given in the colour hints with the position of lights in the scene and colour tones. The lack of controls can be troublesome for the artists to manage. We would like to have a more straightforward and fine-grained way of manipulating the overall colour and styles of the input. In addition, in the context of this master project, keeping the same object the same colour and styles constantly across hundreds of frames or even in another scene can also be a challenging task. Ideally, we would like to control individual characters' styles even when multiple characters are in the same frame.
 
-Furthermore, some artefacts were observed when colouring large regions with similar colours, this can be due to the fact that there are very few such regions in the pre-train dataset, as modern anime arts often come with appropriate lighting and details, which can be missing in 2D animation due to workload. I suggest future research to experiment with training from scratch and pre-training to see which model performs best since the pre-train model cannot completely ignore previously learnt patterns.
+Furthermore, some artefacts were observed when colouring large regions with similar colours; this can be because there are very few such regions in the pre-train dataset, as modern anime arts often come with appropriate lighting and details, which can be missing in 2D animation due to workload. I suggest future research to experiment with training from scratch and pre-training to see which model performs best since the pre-train model cannot wholly ignore previously learnt patterns.
 
 Moreover, the final AlacGAN model generates coloured images at an average speed of 0.67 frames per second (FPS), which is not up to the standard of real-time requirements, also making it the slowest out of all four tasks. This is expected to be the bottleneck of the whole pipeline. To improve the speed of the inference, I propose the following potential improvements.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/colorization/bad-sketch-colourization.png}
+    \caption[Samples of the unpleasant colourized images due to bad sketch input.]{Samples of the unpleasant colourized images due to bad sketch input. Column (a) is input sketch, column (b) is target image, column (c) is colourized image. We can see that the colourized input suffers from the colour bleeding problem. However, we can note that the regions where colour bleeding takes place are region that does not have a clear boundary in the sketch but exists in the target image. Therefore I suspect that it is the source of the error.}
+    \label{fig:bad-sketch-colourization}
+\end{figure}
+
+
+Specifically for NoGhost, I observed a critical problem regarding data quality. From figure \ref{fig:bad-sketch-colourization}, we can see that the outputs had a certain degree of colour bleeding. This is because the line art often has missing details, resulting in many colour boundaries not being well-defined. Yet, the input colour hints encourage the model to produce colour in these areas, resulting in hard-to-learn patterns and unpleasant artefacts. Boundary-less hint also partly contributes to overfitting since the model is forced to remember the boundary without hints, and the dataset is relatively small compared to the pre-train dataset.
+
 \begin{itemize}
-    \item \textbf{Knowledge distillation} The pre-trained local feature network can be useful at times but it can be computationally expensive and utilized at max capacity. We can introduce a smaller feature network and uses the pre-trained local feature network as the teacher to guide its learning. This processing is known as knowledge distillation (see appendix \ref{app:ml:kd}). This idea can be expanded to other parts of the network to further compress the model.
-    \item \textbf{Domain specific tuning} The current model is pre-trained with thousands of online images, each of them coloured individually with detailed styling and artistic details. However, it is uncommon for 2D animation to achieve such a level of detail. By observing the frames from NoGhost, it is obvious that the most common colouring technique used is flat shading with little colour variation within the same enclosed region. Therefore, we could potentially reduce the receptive field of the ResNeXt convolution tunnels to achieve similar results.
-    \item \textbf{Divide and Conquer} It has been shown that with grayscale information, colourization of real-life photos can be achieved in real-time \cite{zhangRealTimeUserGuidedImage2017}. We can split the single sketch colourization tasks into two: grayscale-lization and colourization. When given information such as light position and exposure, the first model will be able to estimate the depth/shadow features of the sketch image. This information will be then fed into the second network with the sketch image, producing the final colourized image. As such, the first model is essentially a pre-trained feature extractor.
+    \item \textbf{Knowledge distillation} The pre-trained local feature network can be useful at times, but it can be computationally expensive and utilized at max capacity. We can introduce a smaller feature network and uses the pre-trained local feature network as the teacher to guide its learning. This processing is known as knowledge distillation (see appendix \ref{app:ml:kd}). This idea can also be expanded to other network parts to compress the model further.
+    \item \textbf{Domain specific tuning} The current model is pre-trained with thousands of online images, each of them coloured individually with detailed styling and artistic details. However, it is uncommon for 2D animation to achieve such a level of detail. By observing the frames from NoGhost, it is evident that the most common colouring technique used is flat shading with slight colour variation within the enclosed region. Therefore, we could potentially reduce the receptive field of the ResNeXt convolution tunnels to achieve similar results.
+    \item \textbf{Divide and Conquer} It has been shown that with grayscale information, colourization of real-life photos can be achieved in real-time \cite{zhangRealTimeUserGuidedImage2017}. We can split the single sketch colourization tasks into grayscale-lization and colourization. When given information such as light position and exposure, the first model will be able to estimate the depth/shadow features of the sketch image. This information will then be fed into the second network with the sketch image, producing the final colourized image. As such, the first model is essentially a pre-trained feature extractor.
 \end{itemize}
 

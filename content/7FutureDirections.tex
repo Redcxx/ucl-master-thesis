@@ -1,5 +1,20 @@
 \chapter{Future \& Directions}
 \label{chapterlabel7}
 
+\section{State of Tasks}
+One of the main purposes of this thesis is to provide a development review of tasks. In a nutshell, the amount of research and progress can be ranked from low to high: Colourization $<$ Sketch Simplification $<$ Frame Interpolation $\leq$ Super Resolution. Super resolution is a long-standing task as it is applicable to any videos. Frame interpolation can be used to increase frame rate of any low-resolution videos therefore it also has a considerable amount of interest in reseaarch industry. Both tasks are popular research areas in recent years, with little finetuning effort, it is possible to generate accurate outputs with real-time performance. Sketch simplification on the other hand, is 2D animation specific, therefore there are comparatively less research interest. It can be viewed as a task to remove noise, however, the definition of noise can vary and result in less effort devoted to our region of interest. Nevertheless, it is a relatively simple task if we can obtain high-quality training samples. Colourization seems to be a field with mature solutions. However, solutions in traditional grayscale image colourization task do not apply directly to 2D anime-style sketches. This is because anime-style sketches have less information and less well-defined objective function, making it the most challenging and time-consuming task out of all.
+
+\section{Next Steps}
+
+The most critical action item for NoGhost is to create appropriate datasets. For most machine learning tasks, the dataset is much more important than the model architecture or training procedure. Learning from noisy labels severely degrades the performance and generalization capability of any model. Especially in the context of 2D animation since many subtasks are relatively straightforward. Although research that tries to handle datasets with noise with robust learning methods such as regularization, loss adjustments, sample selection and noise adaptation layers\cite{songLearningNoisyLabels2022}, it remains a challenging task and we should avoid them in the production environment.
+
+In terms of research, sketch simplification should be prioritized. This is because it is the first step in the pipeline, a fast and high-quality output can provide a solid foundation for subsequent tasks. Unlike colourization, it is also a more well-defined task with a clear objective, and the optimization techniques proposed in the previous sections are relatively easy to implement, making it suitable for new machine learning researchers to learn about image-to-image translation. The follow-up task would be to tackle the colourization task. As the most complicated task, it requires intensive experiments, by starting early, we can better understand the limitation of current SOTA models and set out the timeline and compromises needed for a working prototype.
+
+In term of software engineering, we should set up the whole pipeline as early as possible, even if some of the models are not producing satisfactory results. So that we can set expectations on how much more optimizations are needed for a real-time system, and get a better grip on the capability of the whole system.
+
+Lastly, detailed future directions for a specific task are written at the end of the corresponding chapter. Researchers are strongly advised to check them out before proceed with further experiments.
+
+% Although some fields remained under-explored, existing research is able to solve most problems and is more than enough for the purpose of generating previews for lead artists. 
+
 % This just dumps some pseudolatin in so you can see some text in place.
 % \blindtext
