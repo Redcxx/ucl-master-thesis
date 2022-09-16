@@ -60,14 +60,16 @@
 %  There are quite a few useful ones, so we've put them in a 
 %   separate file.
 \input{MainPackages}
-% Sets up links within your document, for e.g. contents page entries
-%  and references, and also PDF metadata.
-% You should edit this!
-\input{LinksAndMetadata}
+
 
 % And then some settings in separate files.
 \input{FloatSettings} % For things like figures and tables
 \input{BibSettings}   % For bibliographies
+
+% Sets up links within your document, for e.g. contents page entries
+%  and references, and also PDF metadata.
+% You should edit this!
+\input{LinksAndMetadata}
 
 % These control how many number sections your subsections will take
 %    e.g. Section 2.3.1.5.6.3
@@ -75,8 +77,9 @@
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
-\begin{document}
+\usepackage{breakcites}
 
+\begin{document}
 \nobibliography*
 % ^-- This is a dumb trick that works with the bibentry package to let
 %  you put bibliography entries whereever you like.
